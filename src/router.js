@@ -2,6 +2,8 @@ import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from './views/HomeView.vue'
 import CanteenListView from './views/CanteenListView.vue'
 import CanteenDetailView from './views/CanteenDetailView.vue'
+import PrivateRoomView from './views/PrivateRoomView.vue'
+import NutritionAdvice from './views/NutritionAdvice.vue'
 
 const routes = [
   {
@@ -21,11 +23,26 @@ const routes = [
     props: true
   },
   {
-  path: '/daily-menu',
-  name: 'daily-menu',
-  component: () => import('./views/DailyMenuView.vue')
-}
-  
+    path: '/profile',
+    name: 'profile',
+    component: () => import('./views/ProfileView.vue'),
+    meta: { requiresAuth: true } // 如果需要登录才能访问
+  },
+  {
+    path: '/private-room',
+    name: 'PrivateRoom',
+    component: PrivateRoomView,
+  },
+  {
+    path: '/nutrition',
+    name: 'NutritionAdvice',
+    component: NutritionAdvice,
+  },
+  {
+    path: '/daily-menu',
+    name: 'daily-menu',
+    component: () => import('./views/DailyMenuView.vue')
+  }
 ]
 
 const router = createRouter({
