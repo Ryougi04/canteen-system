@@ -19,7 +19,13 @@ const routes = [
     name: 'canteen-detail',
     component: CanteenDetailView,
     props: true
-  }
+  },
+  {
+  path: '/daily-menu',
+  name: 'daily-menu',
+  component: () => import('./views/DailyMenuView.vue')
+}
+  
 ]
 
 const router = createRouter({

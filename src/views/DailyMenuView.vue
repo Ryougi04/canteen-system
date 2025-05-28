@@ -1,0 +1,302 @@
+<template>
+  <div class="daily-menu-container">
+    <button class="back-button" @click="goToHome">
+      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+        <polyline points="9 22 9 12 15 12 15 22"></polyline>
+      </svg>
+      返回主页
+    </button>
+
+    <h1 class="title">每日菜单</h1>
+    
+    <div class="filter-section">
+      <div class="filter-item">
+        <label for="date">日期：</label>
+        <select id="date" v-model="selectedDate" @change="fetchMenu">
+          <option v-for="date in availableDates" :key="date" :value="date">
+            {{ formatDate(date) }}
+          </option>
+        </select>
+      </div>
+      
+      <div class="filter-item">
+        <label for="canteen">食堂：</label>
+        <select id="canteen" v-model="selectedCanteen" @change="fetchMenu">
+          <option v-for="canteen in canteens" :key="canteen.id" :value="canteen.id">
+            {{ canteen.name }}
+          </option>
+        </select>
+      </div>
+      
+      <div class="filter-item">
+        <label for="floor">楼层：</label>
+        <select id="floor" v-model="selectedFloor" @change="fetchMenu">
+          <option v-for="floor in floors" :key="floor" :value="floor">
+            {{ floor }}层
+          </option>
+        </select>
+      </div>
+    </div>
+    
+    <div class="menu-content" v-if="menuItems.length > 0">
+      <h2 class="menu-title">{{ selectedCanteenName }} {{ selectedFloor }}层 菜单</h2>
+      <p class="menu-date">{{ formatDate(selectedDate) }}</p>
+      
+      <div class="menu-categories">
+        <div class="menu-category" v-for="category in menuCategories" :key="category">
+          <h3>{{ category }}</h3>
+          <ul>
+            <li v-for="item in getItemsByCategory(category)" :key="item.id">
+              <span class="dish-name">{{ item.name }}</span>
+              <span class="dish-price">{{ item.price }}元</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    
+    <div class="no-menu" v-else>
+      <p>暂无菜单数据</p>
+    </div>
+  </div>
+</template>
+
+<script>
+export default {
+  name: 'DailyMenuView',
+  data() {
+    return {
+      selectedDate: new Date().toISOString().split('T')[0],
+      selectedCanteen: 'xueyuan',
+      selectedFloor: '1',
+      availableDates: this.generateDates(),
+      canteens: [
+        { id: 'xueyuan', name: '学苑楼食堂' },
+        { id: 'xueshi', name: '学士楼食堂' },
+        { id: 'xuezi', name: '学子楼食堂' }
+      ],
+      floors: ['1', '2', '3'],
+      menuItems: [],
+      menuCategories: ['早餐', '午餐', '晚餐', '夜宵']
+    }
+  },
+  computed: {
+    selectedCanteenName() {
+      const canteen = this.canteens.find(c => c.id === this.selectedCanteen)
+      return canteen ? canteen.name : ''
+    }
+  },
+  created() {
+    this.fetchMenu()
+  },
+  methods: {
+    goToHome() {
+      this.$router.push({ name: 'home' })
+    },
+    formatDate(dateStr) {
+      const date = new Date(dateStr)
+      return `${date.getMonth() + 1}月${date.getDate()}日`
+    },
+    generateDates() {
+      const dates = []
+      const today = new Date()
+      for (let i = 0; i < 7; i++) {
+        const date = new Date(today)
+        date.setDate(today.getDate() + i)
+        dates.push(date.toISOString().split('T')[0])
+      }
+      return dates
+    },
+    fetchMenu() {
+      // 模拟API请求，实际项目中替换为真实API调用
+      this.menuItems = this.getMockMenuData()
+    },
+    getItemsByCategory(category) {
+      return this.menuItems.filter(item => item.category === category)
+    },
+    getMockMenuData() {
+      // 模拟数据，实际项目中从API获取
+      const mockData = {
+        xueyuan: {
+          '1': [
+            { id: 1, name: '豆浆', price: 2, category: '早餐' },
+            { id: 2, name: '油条', price: 3, category: '早餐' },
+            { id: 3, name: '红烧肉', price: 12, category: '午餐' },
+            { id: 4, name: '清炒时蔬', price: 8, category: '午餐' },
+            { id: 5, name: '米饭', price: 1, category: '午餐' },
+            { id: 6, name: '牛肉面', price: 15, category: '晚餐' }
+          ],
+          '2': [
+            { id: 7, name: '煎饼果子', price: 6, category: '早餐' },
+            { id: 8, name: '宫保鸡丁', price: 10, category: '午餐' },
+            { id: 9, name: '鱼香肉丝', price: 12, category: '晚餐' }
+          ]
+        },
+        xueshi: {
+          '1': [
+            { id: 10, name: '牛奶', price: 3, category: '早餐' },
+            { id: 11, name: '面包', price: 5, category: '早餐' },
+            { id: 12, name: '糖醋排骨', price: 15, category: '午餐' }
+          ]
+        },
+        xuezi: {
+          '1': [
+            { id: 13, name: '包子', price: 2, category: '早餐' },
+            { id: 14, name: '粥', price: 3, category: '早餐' },
+            { id: 15, name: '麻辣香锅', price: 18, category: '晚餐' }
+          ],
+          '3': [
+            { id: 16, name: '烧烤套餐', price: 25, category: '夜宵' }
+          ]
+        }
+      }
+
+      return mockData[this.selectedCanteen]?.[this.selectedFloor] || []
+    }
+  }
+}
+</script>
+
+<style scoped>
+.daily-menu-container {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 20px;
+  position: relative;
+  color: #000; /* ✅ 默认全局文字为黑色 */
+}
+
+.back-button {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  background: #f0f7ff;
+  border: none;
+  border-radius: 6px;
+  padding: 8px 12px;
+  color: #4a90e2;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.back-button:hover {
+  background: #e0efff;
+  transform: translateY(-2px);
+}
+
+.title {
+  text-align: center;
+  margin: 20px 0 30px;
+  font-size: 28px;
+}
+
+.filter-section {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  margin-bottom: 30px;
+  flex-wrap: wrap;
+}
+
+.filter-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.filter-item label {
+  font-weight: 500;
+  color: #000; /* ✅ 黑色 */
+}
+
+.filter-item select {
+  padding: 8px 12px;
+  border-radius: 6px;
+  border: 1px solid #ddd;
+  min-width: 120px;
+  color: #000; /* ✅ 黑色文字 */
+}
+
+.menu-content {
+  background: white;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.menu-title {
+  color: #000; /* ✅ 黑色 */
+  margin-top: 0;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 10px;
+}
+
+.menu-date {
+  color: #000; /* ✅ 黑色 */
+  margin-top: -10px;
+  margin-bottom: 20px;
+}
+
+.menu-categories {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 20px;
+}
+
+.menu-category {
+  background: #f9f9f9;
+  border-radius: 8px;
+  padding: 15px;
+}
+
+.menu-category h3 {
+  margin-top: 0;
+  color: #000; /* ✅ 黑色 */
+  border-bottom: 1px solid #ddd;
+  padding-bottom: 8px;
+}
+
+.menu-category ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.menu-category li {
+  display: flex;
+  justify-content: space-between;
+  padding: 8px 0;
+  border-bottom: 1px dashed #0f0909;
+}
+
+.dish-name {
+  font-weight: 500;
+  color: #000; /* ✅ 黑色 */
+}
+
+.dish-price {
+  color: #000; /* ✅ 黑色 */
+}
+
+.no-menu {
+  text-align: center;
+  padding: 40px;
+  color: #666;
+}
+
+@media (max-width: 768px) {
+  .filter-section {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .menu-categories {
+    grid-template-columns: 1fr;
+  }
+}
+</style>
