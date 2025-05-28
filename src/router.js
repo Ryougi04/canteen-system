@@ -4,6 +4,7 @@ import CanteenListView from './views/CanteenListView.vue'
 import CanteenDetailView from './views/CanteenDetailView.vue'
 import PrivateRoomView from './views/PrivateRoomView.vue'
 import NutritionAdvice from './views/NutritionAdvice.vue'
+import DishRanking from "./views/DishRanking.vue";
 
 const routes = [
   {
@@ -42,7 +43,12 @@ const routes = [
     path: '/daily-menu',
     name: 'daily-menu',
     component: () => import('./views/DailyMenuView.vue')
-  }
+  },
+  {
+    path: '/dish-ranking',
+    name: 'DishRanking',
+    component: DishRanking,
+  },
 ]
 
 const router = createRouter({
@@ -50,4 +56,4 @@ const router = createRouter({
   routes
 })
 
-export default router 
+export default router
