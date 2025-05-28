@@ -113,6 +113,25 @@ h1 {
   margin-bottom: 20px;
 }
 
+.back-button {
+  width: auto;
+  align-self: flex-start;
+  background: #f0f7ff;
+  color: #4a90e2;
+  top: 10px;
+  left: 10px;
+  padding: 6px 10px;
+  font-size: 12px;
+}
+.back-button:hover {
+  background: #e0efff;
+  transform: translateY(-2px);
+}
+.back-button svg {
+  width: 16px;
+  height: 16px;
+}
+
 .chat-box {
   flex-grow: 1; /* chat-box 填充剩余空间 */
   max-height: 70vh; /* 可选：设置最大高度避免超出视口 */
@@ -180,13 +199,5 @@ button:hover {
   font-size: 24px;
   color: #4a90e2;
   margin-bottom: 20px;
-}
-
-.back-button {
-  align-self: flex-end;
-  top: 10px;
-  left: 10px;
-  padding: 6px 10px;
-  font-size: 12px;
 }
 </style>
