@@ -47,9 +47,18 @@
         <div class="menu-category" v-for="category in menuCategories" :key="category">
           <h3>{{ category }}</h3>
           <ul>
-            <li v-for="item in getItemsByCategory(category)" :key="item.id">
+            <li v-for="item in getItemsByCategory(category)" :key="item.id" class="dish-item">
               <span class="dish-name">{{ item.name }}</span>
               <span class="dish-price">{{ item.price }}元</span>
+              <div class="rating">
+                <span
+                  v-for="star in 5"
+                  :key="star"
+                  class="star"
+                  :class="{ filled: item.rating >= star }"
+                  @click="rateDish(item.id, star)"
+                >★</span>
+              </div>
             </li>
           </ul>
         </div>
@@ -67,6 +76,7 @@ export default {
   name: 'DailyMenuView',
   data() {
     return {
+      dishRatings:{},
       selectedDate: new Date().toISOString().split('T')[0],
       selectedCanteen: 'xueyuan',
       selectedFloor: '1',
@@ -109,8 +119,15 @@ export default {
       return dates
     },
     fetchMenu() {
-      // 模拟API请求，实际项目中替换为真实API调用
-      this.menuItems = this.getMockMenuData()
+      this.menuItems = this.getMockMenuData().map(item => {
+        item.rating = this.dishRatings[item.id] || 0
+        return item
+      })
+    },
+    rateDish(dishId, rating) {
+      this.dishRatings[dishId] = rating
+      const dish = this.menuItems.find(d => d.id === dishId)
+      if (dish) dish.rating = rating
     },
     getItemsByCategory(category) {
       return this.menuItems.filter(item => item.category === category)
@@ -266,7 +283,28 @@ export default {
   padding: 0;
   margin: 0;
 }
+.dish-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 6px 0;
+}
 
+.rating {
+  display: inline-block;
+  cursor: pointer;
+}
+
+.star {
+  font-size: 18px;
+  color: #ccc;
+  margin-left: 2px;
+  transition: color 0.2s;
+}
+
+.star.filled {
+  color: gold;
+}
 .menu-category li {
   display: flex;
   justify-content: space-between;
@@ -294,6 +332,7 @@ export default {
     flex-direction: column;
     align-items: center;
   }
+  
 
   .menu-categories {
     grid-template-columns: 1fr;
