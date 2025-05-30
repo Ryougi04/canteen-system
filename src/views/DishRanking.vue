@@ -52,6 +52,20 @@ export default {
           rating: 4.3,
           likes: 93,
         },
+        {
+          id: 5,
+          name: '油炸梅朗潇',
+          image: 'src/assets/suancaiyu.jpg',
+          rating: 4.9,
+          likes: 100,
+        },
+        {
+          id: 6,
+          name: '油炸梅朗潇',
+          image: 'src/assets/suancaiyu.jpg',
+          rating: 4.9,
+          likes: 100,
+        },
       ],
     };
   },

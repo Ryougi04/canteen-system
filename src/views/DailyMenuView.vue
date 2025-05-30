@@ -48,7 +48,7 @@
           <h3>{{ category }}</h3>
           <ul>
             <li v-for="item in getItemsByCategory(category)" :key="item.id" class="dish-item">
-              <span class="dish-name">{{ item.name }}</span>
+              <span class="dish-name">{{ item.dish_name }}</span>
               <span class="dish-price">{{ item.price }}元</span>
               <div class="rating">
                 <span
@@ -56,7 +56,7 @@
                   :key="star"
                   class="star"
                   :class="{ filled: item.rating >= star }"
-                  @click="rateDish(item.id, star)"
+                  @click="rateDish(item.dish_id, star)"
                 >★</span>
               </div>
             </li>
@@ -72,24 +72,38 @@
 </template>
 
 <script>
+import axios from 'axios'
+
 export default {
   name: 'DailyMenuView',
   data() {
     return {
       dishRatings:{},
       selectedDate: new Date().toISOString().split('T')[0],
-      selectedCanteen: 'xueyuan',
+      selectedCanteen: '1',
       selectedFloor: '1',
       availableDates: this.generateDates(),
       canteens: [
-        { id: 'xueyuan', name: '学苑楼食堂' },
-        { id: 'xueshi', name: '学士楼食堂' },
-        { id: 'xuezi', name: '学子楼食堂' }
+        { id: '1', name: '学苑楼食堂' },
+        { id: '2', name: '学士楼食堂' },
+        { id: '3', name: '学子楼食堂' }
       ],
       floors: ['1', '2', '3'],
+      dishes: [],
       menuItems: [],
       menuCategories: ['早餐', '午餐', '晚餐', '夜宵']
     }
+  },
+  mounted() {
+    axios.get("http://localhost:8080/dish/getAll")
+        .then((res) => {
+          if(res.data.code == 200) {
+            this.dishes = res.data.dish
+            // sessionStorage.setItem("dishNum", this.dishes.length)
+            this.fetchMenu()
+          }
+        })
+        .catch(console.error)
   },
   computed: {
     selectedCanteenName() {
@@ -119,14 +133,21 @@ export default {
       return dates
     },
     fetchMenu() {
-      this.menuItems = this.getMockMenuData().map(item => {
+      // this.menuItems = this.getMockMenuData().map(item => {
+      //   item.rating = this.dishRatings[item.id] || 0
+      //   return item
+      // })
+      this.menuItems = (this.dishes || []).filter(
+          item => item.canteen_id == this.selectedCanteen && item.floor == this.selectedFloor
+      )
+
+      this.menuItems.forEach(item => {
         item.rating = this.dishRatings[item.id] || 0
-        return item
       })
     },
     rateDish(dishId, rating) {
       this.dishRatings[dishId] = rating
-      const dish = this.menuItems.find(d => d.id === dishId)
+      const dish = this.menuItems.find(d => d.dish_id === dishId)
       if (dish) dish.rating = rating
     },
     getItemsByCategory(category) {
