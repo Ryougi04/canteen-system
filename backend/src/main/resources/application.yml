@@ -1,0 +1,13 @@
+spring:
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5432/canteen
+    username: postgres
+    password: 123456
+
+mybatis-plus:
+  configuration:
+    map-underscore-to-camel-case: false
+
+server:
+  port: 8080
