@@ -275,6 +275,7 @@ export default {
 
 .info-item span {
   flex: 1;
+  color: #000;
 }
 
 .action-buttons {
