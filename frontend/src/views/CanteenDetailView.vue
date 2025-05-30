@@ -20,8 +20,8 @@
     </div>
     
     <div class="detail-content">
-      <!-- 这里可以添加食堂的详细信息 -->
-      <p>这里是{{ currentCanteen.name }}的详细介绍...</p>
+      <!-- 食堂的详细信息 -->
+      <p>{{ currentCanteen.description }}</p>
     </div>
   </div>
 </template>
