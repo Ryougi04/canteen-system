@@ -11,3 +11,7 @@ mybatis-plus:
 
 server:
   port: 8080
+
+deepseek:
+  api:
+    key: sk-0b074ec141654db997365e99065f8a49
