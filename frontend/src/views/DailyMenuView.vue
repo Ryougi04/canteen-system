@@ -47,7 +47,7 @@
         <div class="menu-category" v-for="category in menuCategories" :key="category">
           <h3>{{ category }}</h3>
           <ul>
-            <li v-for="item in getItemsByCategory(category)" :key="item.id" class="dish-item">
+            <li v-for="item in getItemsByCategory(category)" :key="item.dish_id" class="dish-item">
               <span class="dish-name">{{ item.dish_name }}</span>
               <span class="dish-price">{{ item.price }}元</span>
               <div class="rating">
@@ -56,7 +56,7 @@
                   :key="star"
                   class="star"
                   :class="{ filled: item.rating >= star }"
-                  @click="rateDish(item.dish_id, star)"
+                  @click="rateDish(item.dish_id, parseFloat(star))"
                 >★</span>
               </div>
             </li>
@@ -81,14 +81,14 @@ export default {
       dishRatings:{},
       selectedDate: new Date().toISOString().split('T')[0],
       selectedCanteen: '1',
-      selectedFloor: '1',
+      selectedFloor: 1,
       availableDates: this.generateDates(),
       canteens: [
         { id: '1', name: '学苑楼食堂' },
         { id: '2', name: '学士楼食堂' },
         { id: '3', name: '学子楼食堂' }
       ],
-      floors: ['1', '2', '3'],
+      floors: [1, 2, 3],
       dishes: [],
       menuItems: [],
       menuCategories: ['早餐', '午餐', '晚餐', '夜宵']
@@ -97,7 +97,7 @@ export default {
   mounted() {
     axios.get("http://localhost:8080/dish/getAll")
         .then((res) => {
-          if(res.data.code == 200) {
+          if(res.data.code === 200) {
             this.dishes = res.data.dish
             // sessionStorage.setItem("dishNum", this.dishes.length)
             this.fetchMenu()
@@ -133,12 +133,8 @@ export default {
       return dates
     },
     fetchMenu() {
-      // this.menuItems = this.getMockMenuData().map(item => {
-      //   item.rating = this.dishRatings[item.id] || 0
-      //   return item
-      // })
       this.menuItems = (this.dishes || []).filter(
-          item => item.canteen_id == this.selectedCanteen && item.floor == this.selectedFloor
+          item => item.canteen_id === this.selectedCanteen && item.floor === this.selectedFloor
       )
 
       this.menuItems.forEach(item => {
@@ -146,51 +142,20 @@ export default {
       })
     },
     rateDish(dishId, rating) {
+      const flag = dishId in this.dishRatings;
+      const dish = this.menuItems.find(item => item.dish_id === dishId)
+      dish.rating = rating
+      axios.post(`http://localhost:8080/dish/update?dish_id=${dishId}&rating=${rating}&flag=${!flag}&last_rating=${flag ? this.dishRatings[dishId] : 0.0}`)
+          .then((res) => {
+            if(res.data.code === 200) {
+              console.log(res.data)
+            }
+          })
+          .catch(console.error)
       this.dishRatings[dishId] = rating
-      const dish = this.menuItems.find(d => d.dish_id === dishId)
-      if (dish) dish.rating = rating
     },
     getItemsByCategory(category) {
       return this.menuItems.filter(item => item.category === category)
-    },
-    getMockMenuData() {
-      // 模拟数据，实际项目中从API获取
-      const mockData = {
-        xueyuan: {
-          '1': [
-            { id: 1, name: '豆浆', price: 2, category: '早餐' },
-            { id: 2, name: '油条', price: 3, category: '早餐' },
-            { id: 3, name: '红烧肉', price: 12, category: '午餐' },
-            { id: 4, name: '清炒时蔬', price: 8, category: '午餐' },
-            { id: 5, name: '米饭', price: 1, category: '午餐' },
-            { id: 6, name: '牛肉面', price: 15, category: '晚餐' }
-          ],
-          '2': [
-            { id: 7, name: '煎饼果子', price: 6, category: '早餐' },
-            { id: 8, name: '宫保鸡丁', price: 10, category: '午餐' },
-            { id: 9, name: '鱼香肉丝', price: 12, category: '晚餐' }
-          ]
-        },
-        xueshi: {
-          '1': [
-            { id: 10, name: '牛奶', price: 3, category: '早餐' },
-            { id: 11, name: '面包', price: 5, category: '早餐' },
-            { id: 12, name: '糖醋排骨', price: 15, category: '午餐' }
-          ]
-        },
-        xuezi: {
-          '1': [
-            { id: 13, name: '包子', price: 2, category: '早餐' },
-            { id: 14, name: '粥', price: 3, category: '早餐' },
-            { id: 15, name: '麻辣香锅', price: 18, category: '晚餐' }
-          ],
-          '3': [
-            { id: 16, name: '烧烤套餐', price: 25, category: '夜宵' }
-          ]
-        }
-      }
-
-      return mockData[this.selectedCanteen]?.[this.selectedFloor] || []
     }
   }
 }

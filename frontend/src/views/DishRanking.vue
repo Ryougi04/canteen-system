@@ -5,13 +5,13 @@
     </div>
     <h1 class="title">菜品排行</h1>
     <div class="dish-list">
-      <div v-for="(dish, index) in dishes" :key="dish.id" class="dish-card">
+      <div v-for="(dish, index) in dishes" :key="dish.dish_id" class="dish-card">
         <span class="rank-number">#{{ index + 1 }}</span>
-        <img :src="dish.image" alt="dish image" class="dish-image" />
+        <img :src="`src/assets/${dish.image}.jpg`" alt="dish image" class="dish-image" />
         <div class="dish-info">
-          <h2 class="dish-name">{{ dish.name }}</h2>
+          <h2 class="dish-name">{{ dish.dish_name }}</h2>
           <p class="dish-rating">评分：{{ dish.rating }} / 5</p>
-          <p class="dish-likes">👍 {{ dish.likes }}</p>
+          <p class="dish-likes">👍 {{ dish.rating_num }}</p>
         </div>
       </div>
     </div>
@@ -19,55 +19,24 @@
 </template>
 
 <script>
+import axios from "axios";
+
 export default {
   name: 'DishRanking',
   data() {
     return {
-      dishes: [
-        {
-          id: 1,
-          name: '红烧肉',
-          image: 'src/assets/hongshaorou.jpg',
-          rating: 4.8,
-          likes: 120,
-        },
-        {
-          id: 2,
-          name: '宫保鸡丁',
-          image: 'src/assets/yuxiangrousi.jpg',
-          rating: 4.7,
-          likes: 110,
-        },
-        {
-          id: 3,
-          name: '鱼香肉丝',
-          image: 'src/assets/yuxiangrousi.jpg',
-          rating: 4.6,
-          likes: 98,
-        },
-        {
-          id: 4,
-          name: '酸菜鱼',
-          image: 'src/assets/suancaiyu.jpg',
-          rating: 4.3,
-          likes: 93,
-        },
-        {
-          id: 5,
-          name: '油炸梅朗潇',
-          image: 'src/assets/suancaiyu.jpg',
-          rating: 4.9,
-          likes: 100,
-        },
-        {
-          id: 6,
-          name: '油炸梅朗潇',
-          image: 'src/assets/suancaiyu.jpg',
-          rating: 4.9,
-          likes: 100,
-        },
-      ],
+      dishes: [],
     };
+  },
+  mounted() {
+    axios.get("http://localhost:8080/dish/getAll")
+        .then((res) => {
+          if(res.data.code === 200) {
+            this.dishes = res.data.dish.sort((a, b) => b.rating - a.rating);
+            this.fetchMenu()
+          }
+        })
+        .catch(console.error)
   },
   methods: {
     goToHome() {

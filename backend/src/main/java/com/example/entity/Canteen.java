@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @TableName(value = "cantten", autoResultMap = true)
 public class Canteen {
-  @TableId(value = "canteen_id", type = IdType.ASSIGN_ID)
+  @TableId(value = "canteen_id")
   String canteen_id;
   String canteen_name;
   String position;

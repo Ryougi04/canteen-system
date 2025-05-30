@@ -12,15 +12,17 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @TableName(value = "dish", autoResultMap = true)
 public class Dish {
-  @TableId(value = "dish_id", type = IdType.ASSIGN_ID)
+  @TableId(value = "dish_id")
   String dish_id;
   String dish_name;
-  Integer price;
+  int price;
   String description;
-  Integer likes;
-  Integer bookings;
+  int likes;
+  int bookings;           // 预订数
   String canteen_id;
-  String category;    // 早/中/晚时段
-  Float rating;
-  Integer floor;
+  String category;        // 早中晚时段
+  public float rating;
+  int floor;              // 食堂层数
+  public int rating_num;  // 评价人数
+  String image;
 }

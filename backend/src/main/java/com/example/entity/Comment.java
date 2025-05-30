@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @TableName(value = "comment", autoResultMap = true)
 public class Comment {
-  @TableId(value = "comment_id", type = IdType.ASSIGN_ID)
+  @TableId(value = "comment_id")
   String comment_id;
   String content;
   String dish_id;
