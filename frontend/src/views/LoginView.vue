@@ -37,9 +37,12 @@ const handleLogin = () => {
 
 <style scoped>
 .login-container {
+  display: flex;
+  flex-direction: column; /* 垂直排列 */
+  align-items: center; /* 水平居中所有子元素 */
   max-width: 400px;
   margin: 100px auto;
-  padding: 30px;
+  padding: 60px;
   border-radius: 10px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   background: white;
