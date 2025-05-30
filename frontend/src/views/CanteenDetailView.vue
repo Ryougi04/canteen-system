@@ -40,18 +40,18 @@ export default {
       const canteens = {
         xueyuan: {
           name: '学苑楼食堂',
-          hours: '6:30-21:00',
+          hours: '6:30-19:00',
           description: '学苑楼食堂是学校最大的食堂，提供各种风味的菜品...'
         },
         xueshi: {
           name: '学士楼食堂',
           hours: '6:00-20:30',
-          description: '学士楼食堂以健康营养为特色，提供多种套餐选择...'
+          description: '学士楼食堂营业时间最长，夜宵选择丰富...'
         },
         xuezi: {
           name: '学子楼食堂',
-          hours: '6:30-22:00',
-          description: '学子楼食堂营业时间最长，夜宵选择丰富...'
+          hours: '10:00-19:00',
+          description: '学子楼食堂以健康营养为特色，提供多种套餐选择...'
         }
       }
       return canteens[this.id] || {}

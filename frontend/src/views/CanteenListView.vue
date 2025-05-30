@@ -37,7 +37,7 @@ export default {
         {
           id: 'xueyuan',
           name: '学苑楼食堂',
-          hours: '6:30-21:00',
+          hours: '6:30-19:00',
           image: xueyuanImg
         },
         {
@@ -49,7 +49,7 @@ export default {
         {
           id: 'xuezi',
           name: '学子楼食堂',
-          hours: '6:30-22:00',
+          hours: '10:00-19:00',
           image: xueziImg
         }
       ]
