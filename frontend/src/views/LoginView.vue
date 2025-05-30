@@ -1,7 +1,7 @@
 <template>
   <div class="login-container">
     <!-- 徽章图片 -->
-    <img src="/src/assets/hit.jpg" alt="徽章" class="badge" />
+    <img src="../assets/hit.jpg" alt="徽章" class="badge" />
     <h2>食堂服务系统</h2>
     <form @submit.prevent="handleLogin">
       <div class="form-group">
