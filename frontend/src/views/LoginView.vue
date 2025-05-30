@@ -20,18 +20,35 @@
 <script setup>
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
+import axios from "axios";
 
 const username = ref('')
 const password = ref('')
 const router = useRouter()
 
 const handleLogin = () => {
-  if (username.value === 'admin' && password.value === '123456') {
-    localStorage.setItem('auth', 'true')
-    router.push('/home')
-  } else {
-    alert('用户名或密码错误')
-  }
+  // if (username.value === 'admin' && password.value === '123456') {
+  //   localStorage.setItem('auth', 'true')
+  //   router.push('/home')
+  // } else {
+  //   alert('用户名或密码错误')
+  // }
+  console.log(username.value)
+  axios.get(`http://localhost:8080/user/get?username=${username.value}`)
+      .then((res) => {
+        if(res.data.code === 200 && res.data.user.password === password.value) {
+          localStorage.setItem('auth', 'true')
+          // sessionStorage.setItem("username", username.value)
+          // sessionStorage.setItem("flag", 0)
+          router.push('/home')
+        } else {
+          alert("用户名或密码错误！")
+        }
+      })
+      .catch((err) => {
+        console.log(err)
+        alert("用户不存在！")
+      })
 }
 </script>
 

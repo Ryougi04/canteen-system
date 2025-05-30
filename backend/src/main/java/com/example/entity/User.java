@@ -10,8 +10,9 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@TableName(value = "user", autoResultMap = true)
+@TableName(value = "users", autoResultMap = true)
 public class User {
+  @TableId(value = "username")
   String username;
   String password;
 }
