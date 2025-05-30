@@ -1,7 +1,8 @@
-
 <template>
   <div class="login-container">
-    <h2>登录食堂服务系统</h2>
+    <!-- 徽章图片 -->
+    <img src="/src/assets/hit.jpg" alt="徽章" class="badge" />
+    <h2>食堂服务系统</h2>
     <form @submit.prevent="handleLogin">
       <div class="form-group">
         <label for="username">用户名</label>
@@ -25,10 +26,9 @@ const password = ref('')
 const router = useRouter()
 
 const handleLogin = () => {
-  // 简单模拟认证逻辑
   if (username.value === 'admin' && password.value === '123456') {
-    localStorage.setItem('auth', 'true') // 记录登录状态
-    router.push('/home') // 跳转到主页
+    localStorage.setItem('auth', 'true')
+    router.push('/home')
   } else {
     alert('用户名或密码错误')
   }
@@ -38,8 +38,8 @@ const handleLogin = () => {
 <style scoped>
 .login-container {
   display: flex;
-  flex-direction: column; /* 垂直排列 */
-  align-items: center; /* 水平居中所有子元素 */
+  flex-direction: column;
+  align-items: center;
   max-width: 400px;
   margin: 100px auto;
   padding: 60px;
@@ -47,6 +47,14 @@ const handleLogin = () => {
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   background: white;
   text-align: center;
+}
+
+/* 徽章图片样式，保持正方形，宽高均为80px，可以根据需要调整 */
+.badge {
+  width: 90px;
+  height: 90px;
+  object-fit: contain; /* 保持图片比例，内容缩放 */
+  margin-bottom: 0;
 }
 
 h2 {
@@ -67,7 +75,7 @@ label {
 }
 
 input {
-  width: 100%;
+  width: auto;
   padding: 10px;
   border: 1px solid #ccc;
   border-radius: 6px;
