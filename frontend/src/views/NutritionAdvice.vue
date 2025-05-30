@@ -141,7 +141,7 @@ h1 {
 }
 
 .message {
-  margin: 10px 0;
+  margin: 20px 0;
 }
 
 .user-message {
@@ -150,7 +150,8 @@ h1 {
 }
 
 .model-message {
-  text-align: right;
+  margin-left: 10px;
+  text-align: left;
   color: #4a90e2;
 }
 

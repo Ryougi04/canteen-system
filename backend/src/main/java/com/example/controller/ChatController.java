@@ -1,7 +1,7 @@
-package com.example.aiassistant.controller;
+package com.example.controller;
 
-import com.example.aiassistant.entity.ChatRequest;
-import com.example.aiassistant.service.ChatService;
+import com.example.entity.ChatRequest;
+import com.example.service.ChatService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 

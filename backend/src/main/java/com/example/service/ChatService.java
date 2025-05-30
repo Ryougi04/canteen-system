@@ -1,4 +1,4 @@
-package com.example.aiassistant.service;
+package com.example.service;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
@@ -49,10 +49,10 @@ public class ChatService {
                 return "余额不足，请充值后重试。";
             }
             e.printStackTrace();
-            return "请求出错：" + e.getStatusCode() + " " + e.getResponseBodyAsString();
+            return "请求出错：";// + e.getStatusCode() + " " + e.getResponseBodyAsString();
         } catch (Exception e) {
             e.printStackTrace();
-            return "内部错误：" + e.getMessage();
+            return "内部错误：服务器繁忙！";// + e.getMessage();
         }
     }
 }
