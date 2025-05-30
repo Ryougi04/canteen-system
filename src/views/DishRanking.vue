@@ -34,7 +34,7 @@ export default {
         {
           id: 2,
           name: '宫保鸡丁',
-          image: 'src/assets/suancaiyu.jpg',
+          image: 'src/assets/yuxiangrousi.jpg',
           rating: 4.7,
           likes: 110,
         },
@@ -48,7 +48,7 @@ export default {
         {
           id: 4,
           name: '酸菜鱼',
-          image: 'src/assets/hongshaorou.jpg',
+          image: 'src/assets/suancaiyu.jpg',
           rating: 4.3,
           likes: 93,
         },
