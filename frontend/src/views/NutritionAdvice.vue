@@ -59,28 +59,25 @@ export default {
       // 滚动到底部
       this.$nextTick(() => this.scrollToBottom());
 
-      // 向大模型发送请求
-      axios.get(`https://big-model-api.com/ask?question=${encodeURIComponent(question)}`)
-          .then(response => {
-            this.messages.push({
-              sender: 'model',
-              text: response.data.answer || '抱歉，我无法回答这个问题。'
-            });
-            this.loading = false;
+      axios.post('http://localhost:8080/api/chat', {
+        message: question
+      }).then(response => {
+        this.messages.push({
+          sender: 'model',
+          text: response.data
+        });
+        this.loading = false;
+        this.$nextTick(() => this.scrollToBottom());
+      }).catch(() => {
+        this.messages.push({
+          sender: 'model',
+          text: '获取答案失败，请稍后再试。'
+        });
+        this.loading = false;
 
-            // 滚动到底部
-            this.$nextTick(() => this.scrollToBottom());
-          })
-          .catch(error => {
-            this.messages.push({
-              sender: 'model',
-              text: '获取答案失败，请稍后再试。'
-            });
-            this.loading = false;
-
-            // 滚动到底部
-            this.$nextTick(() => this.scrollToBottom());
-          });
+        // 滚动到底部
+        this.$nextTick(() => this.scrollToBottom());
+      });
     },
 
     // 滚动聊天框到底部
@@ -144,7 +141,7 @@ h1 {
 }
 
 .message {
-  margin: 10px 0;
+  margin: 20px 0;
 }
 
 .user-message {
@@ -153,7 +150,8 @@ h1 {
 }
 
 .model-message {
-  text-align: right;
+  margin-left: 10px;
+  text-align: left;
   color: #4a90e2;
 }
 

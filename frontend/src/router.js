@@ -8,7 +8,7 @@ import DishRanking from "./views/DishRanking.vue";
 
 const routes = [
   {
-    path: '/',
+    path: '/home',
     name: 'home',
     component: HomeView
   },
@@ -49,11 +49,24 @@ const routes = [
     name: 'DishRanking',
     component: DishRanking,
   },
+  {
+    path: '/',
+    name: 'login',
+    component: () => import('./views/LoginView.vue')
+  }
 ]
 
 const router = createRouter({
   history: createWebHistory(),
   routes
+})
+router.beforeEach((to, from, next) => {
+  const isAuthenticated = localStorage.getItem('auth') === 'true'
+  if (to.meta.requiresAuth && !isAuthenticated) {
+    next('/login')
+  } else {
+    next()
+  }
 })
 
 export default router

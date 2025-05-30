@@ -148,6 +148,10 @@ export default {
       alert('确定要退出登录吗？')
       // this.$store.dispatch('logout')
       // this.$router.push({ name: 'login' })
+        localStorage.removeItem('auth')
+
+      // 跳转到登录页
+      this.$router.push('/')
     },
     submitPasswordChange() {
       if (this.passwordForm.newPassword !== this.passwordForm.confirmPassword) {
@@ -271,6 +275,7 @@ export default {
 
 .info-item span {
   flex: 1;
+  color: #000;
 }
 
 .action-buttons {
