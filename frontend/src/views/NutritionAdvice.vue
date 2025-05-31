@@ -9,7 +9,7 @@
     <div class="chat-box">
       <div v-for="(message, index) in messages" :key="index" class="message">
         <div :class="{'user-message': message.sender === 'user', 'model-message': message.sender === 'model'}">
-          <strong>{{ message.sender === 'user' ? '你' : '大模型' }}:</strong> {{ message.text }}
+          <strong>{{ message.sender === 'user' ? '你' : 'AI营养助手' }}:</strong> {{ message.text }}
         </div>
       </div>
     </div>
