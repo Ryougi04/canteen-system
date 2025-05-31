@@ -1,4 +1,4 @@
-<template>
+﻿<template>
   <div class="private-room">
     <button class="back-button" @click="goToHome">返回主页</button>
     <h1>包间预约</h1>
