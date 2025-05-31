@@ -25,9 +25,8 @@ public class PrivateRoomController {
     privateRoom.setPhone(phone);
     privateRoom.setDate(date);
     privateRoom.setType(type);
-//    System.out.println(privateRoom);
-
     privateRoomMapper.insert(privateRoom);
+
     json.put("code", 200);
     json.put("msg", "success");
     return json;
