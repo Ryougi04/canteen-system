@@ -148,7 +148,7 @@ export default {
       axios.post(`http://localhost:8080/dish/update?dish_id=${dishId}&rating=${rating}&flag=${!flag}&last_rating=${flag ? this.dishRatings[dishId] : 0.0}`)
           .then((res) => {
             if(res.data.code === 200) {
-              console.log(res.data)
+              console.log(res.data.msg)
             }
           })
           .catch(console.error)
