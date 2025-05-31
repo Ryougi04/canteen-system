@@ -10,7 +10,7 @@
 
     <!-- 菜品点评 -->
     <div class="dish-card">
-      <img :src="`src/assets/${dish.image}.jpg`" alt="dish image" class="dish-image" />
+      <img :src="`/images/${dish.image}.jpg`" alt="dish image" class="dish-image" />
       <div class="dish-info">
         <h2 class="dish-name">{{ dish.dish_name }}</h2>
         <p class="dish-description">{{ dish.description }}</p>
@@ -45,7 +45,7 @@
 import axios from "axios";
 
 export default {
-  name: 'DishReview',
+  name: 'DishComment',
   data() {
     return {
       dishID: this.$route.params.id,
