@@ -1,7 +1,17 @@
 <template>
-  <router-view />
+  <transition name="fade" mode="out-in">
+    <router-view />
+  </transition>
 </template>
 
 <style>
-/* 可以在这里添加全局样式 */
+/* 页面切换动画：淡入淡出 */
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.5s ease;
+}
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}
 </style>
