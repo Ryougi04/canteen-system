@@ -90,11 +90,15 @@ const router = createRouter({
 
 // 路由守卫
 router.beforeEach((to, from, next) => {
-  const isAuthenticated = localStorage.getItem('auth') === 'true'
-  if (to.meta.requiresAuth && !isAuthenticated) {
-    next('/') // 未登录跳转登录页
-  } else {
+  if (to.path === '/') {
     next()
+  } else {
+    const isAuthenticated = localStorage.getItem('auth') === 'true'
+    if (to.meta.requiresAuth && !isAuthenticated) {
+      next('/') // 未登录跳转登录页
+    } else {
+      next()
+    }
   }
 })
 
