@@ -15,4 +15,8 @@ public class User {
   @TableId(value = "username")
   String username;
   String password;
+  String sid;
+  String college;
+  String phone;
+  String avatar;
 }

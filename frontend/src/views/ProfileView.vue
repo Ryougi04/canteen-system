@@ -28,11 +28,11 @@
       <div class="user-info">
         <div class="info-item">
           <label>用户名：</label>
-          <span>{{ user.name }}</span>
+          <span>{{ user.username }}</span>
         </div>
         <div class="info-item">
           <label>学号：</label>
-          <span>{{ user.studentId }}</span>
+          <span>{{ user.sid }}</span>
         </div>
         <div class="info-item">
           <label>学院：</label>
@@ -102,19 +102,20 @@
 </template>
 
 <script>
-import defaultAvatar from '../assets/image.jpg'
+import axios from "axios";
 
 export default {
   name: 'ProfileView',
   data() {
     return {
-      defaultAvatar,
+      username: sessionStorage.getItem('username'),
+      defaultAvatar: 'public/images/image.jpg',
       user: {
-        name: '张三',
-        studentId: '2022000001',
-        college: '计算学部',
-        phone: '12345678910',
-        avatar: ''
+        // username: '张三',
+        // sid: '2022000001',
+        // college: '计算学部',
+        // phone: '12345678910',
+        // avatar: ''
       },
       showPasswordModal: false,
       passwordForm: {
@@ -127,6 +128,16 @@ export default {
   created() {
     // 这里可以从Vuex或API获取用户信息
     // this.fetchUserInfo()
+  },
+  mounted() {
+    axios.get(`http://localhost:8080/user/get?username=${this.username}`)
+        .then((res) => {
+          if(res.data.code === 200) {
+            this.user = res.data.user;
+            console.log(this.user)
+          }
+        })
+        .catch(console.error)
   },
   methods: {
     goToHome() {
