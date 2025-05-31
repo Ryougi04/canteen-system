@@ -29,6 +29,7 @@ const router = useRouter()
 const handleLogin = () => {
   if (username.value === 'admin' && password.value === '123456') {
     localStorage.setItem('auth', 'true')
+    sessionStorage.setItem('username', username.value);
     router.push('/home')
   } else {
     alert('用户名或密码错误')
@@ -38,8 +39,7 @@ const handleLogin = () => {
       .then((res) => {
         if(res.data.code === 200 && res.data.user.password === password.value) {
           localStorage.setItem('auth', 'true')
-          // sessionStorage.setItem("username", username.value)
-          // sessionStorage.setItem("flag", 0)
+          sessionStorage.setItem("username", username.value)
           router.push('/home')
         } else {
           alert("用户名或密码错误！")
