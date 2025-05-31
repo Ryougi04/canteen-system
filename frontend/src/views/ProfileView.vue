@@ -102,7 +102,7 @@
 </template>
 
 <script>
-import defaultAvatar from '../assets/xueshi.jpg'
+import defaultAvatar from '../assets/image.jpg'
 
 export default {
   name: 'ProfileView',
@@ -111,9 +111,9 @@ export default {
       defaultAvatar,
       user: {
         name: '张三',
-        studentId: '20230001',
-        college: '计算机学院',
-        phone: '13800138000',
+        studentId: '2022000001',
+        college: '计算学部',
+        phone: '12345678910',
         avatar: ''
       },
       showPasswordModal: false,
