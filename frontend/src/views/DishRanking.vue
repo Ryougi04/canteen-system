@@ -5,7 +5,7 @@
     </div>
     <h1 class="title">菜品排行</h1>
     <div class="dish-list">
-      <div v-for="(dish, index) in dishes" :key="dish.dish_id" class="dish-card">
+      <div v-for="(dish, index) in dishes" :key="dish.dish_id" class="dish-card" @click="goToComment(dish.dish_id)">
         <span class="rank-number">#{{ index + 1 }}</span>
         <img :src="`src/assets/${dish.image}.jpg`" alt="dish image" class="dish-image" />
         <div class="dish-info">
@@ -25,23 +25,62 @@ export default {
   name: 'DishRanking',
   data() {
     return {
-      dishes: [],
+      dishes: [
+        {
+          dish_id: 1,
+          dish_name: '红烧肉',
+          image: 'hongshaorou',
+          rating: 4.8,
+          rating_num: 120,
+        },
+        {
+          dish_id: 2,
+          dish_name: '宫保鸡丁',
+          image: 'yuxiangrousi',
+          rating: 4.7,
+          rating_num: 110,
+        },
+        {
+          dish_id: 3,
+          dish_name: '鱼香肉丝',
+          image: 'yuxiangrousi',
+          rating: 4.6,
+          rating_num: 98,
+        },
+        {
+          dish_id: 4,
+          dish_name: '酸菜鱼',
+          image: 'suancaiyu',
+          rating: 4.3,
+          rating_num: 93,
+        },
+        {
+          dish_id: 5,
+          dish_name: '油炸梅朗潇',
+          image: 'suancaiyu',
+          rating: 4.9,
+          rating_num: 100,
+        },
+      ],
     };
   },
-  mounted() {
-    axios.get("http://localhost:8080/dish/getAll")
-        .then((res) => {
-          if(res.data.code === 200) {
-            this.dishes = res.data.dish.sort((a, b) => b.rating - a.rating);
-            this.fetchMenu()
-          }
-        })
-        .catch(console.error)
-  },
+  // mounted() {
+  //   axios.get("http://localhost:8080/dish/getAll")
+  //       .then((res) => {
+  //         if(res.data.code === 200) {
+  //           this.dishes = res.data.dish.sort((a, b) => b.rating - a.rating);
+  //           this.fetchMenu()
+  //         }
+  //       })
+  //       .catch(console.error)
+  // },
   methods: {
     goToHome() {
       this.$router.push({ name: 'home' });
     },
+    goToComment(dishID) {
+      this.$router.push({ name: 'comment', params: { id: dishID } })
+    }
   },
 };
 </script>
