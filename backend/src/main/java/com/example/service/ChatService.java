@@ -21,11 +21,20 @@ public class ChatService {
             JSONObject payload = new JSONObject();
             payload.put("model", "deepseek-chat");
 
+            // 添加 system 提示词
+            JSONObject systemMessage = new JSONObject();
+            systemMessage.put("role", "system");
+            systemMessage.put("content", "你是一位专业的营养师，正在为一所学校的食堂服务。用户会向你咨询菜品营养、饮食建议、热量控制等问题。请结合营养知识，用通俗易懂、简洁明了的语言为用户提供科学的饮食建议。");
+
             JSONObject userMessage = new JSONObject();
             userMessage.put("role", "user");
             userMessage.put("content", message);
 
-            payload.put("messages", new org.json.JSONArray().put(userMessage));
+            // 组合消息顺序：system -> user
+            org.json.JSONArray messages = new org.json.JSONArray();
+            messages.put(systemMessage);
+            messages.put(userMessage);
+            payload.put("messages", messages);
 
             HttpHeaders headers = new HttpHeaders();
             headers.setContentType(MediaType.APPLICATION_JSON);
@@ -45,14 +54,14 @@ public class ChatService {
                 return "获取大模型回复失败";
             }
         } catch (HttpClientErrorException e) {
-            if (e.getStatusCode() == HttpStatus.PAYMENT_REQUIRED) {  // 402
+            if (e.getStatusCode() == HttpStatus.PAYMENT_REQUIRED) {
                 return "余额不足，请充值后重试。";
             }
             e.printStackTrace();
-            return "请求出错：";// + e.getStatusCode() + " " + e.getResponseBodyAsString();
+            return "请求出错：";
         } catch (Exception e) {
             e.printStackTrace();
-            return "内部错误：服务器繁忙！";// + e.getMessage();
+            return "内部错误：服务器繁忙！";
         }
     }
 }
