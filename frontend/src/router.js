@@ -11,54 +11,62 @@ const routes = [
   {
     path: '/home',
     name: 'home',
-    component: HomeView
+    component: HomeView,
+    meta: { requiresAuth: true } // ✅ 添加权限控制
   },
   {
     path: '/canteens',
     name: 'canteen-list',
-    component: CanteenListView
+    component: CanteenListView,
+    meta: { requiresAuth: true } // ✅
   },
   {
     path: '/canteens/:id',
     name: 'canteen-detail',
     component: CanteenDetailView,
-    props: true
+    props: true,
+    meta: { requiresAuth: true } // ✅
   },
   {
     path: '/profile',
     name: 'profile',
     component: () => import('./views/ProfileView.vue'),
-    meta: { requiresAuth: true } // 如果需要登录才能访问
+    meta: { requiresAuth: true }
   },
   {
     path: '/private-room',
     name: 'PrivateRoom',
     component: PrivateRoomView,
+    meta: { requiresAuth: true } // ✅
   },
   {
     path: '/nutrition',
     name: 'NutritionAdvice',
     component: NutritionAdvice,
+    meta: { requiresAuth: true } // ✅
   },
   {
     path: '/daily-menu',
     name: 'daily-menu',
-    component: () => import('./views/DailyMenuView.vue')
+    component: () => import('./views/DailyMenuView.vue'),
+    meta: { requiresAuth: true } // ✅
   },
   {
     path: '/dish-ranking',
     name: 'DishRanking',
     component: DishRanking,
+    meta: { requiresAuth: true } // ✅
+  },
+  {
+    path: '/comment/:id',
+    name: 'comment',
+    component: DishComment,
+    meta: { requiresAuth: true } // ✅ 评论应登录后才能写
   },
   {
     path: '/',
     name: 'login',
     component: () => import('./views/LoginView.vue')
-  },
-  {
-    path: '/comment/:id',
-    name: 'comment',
-    component: DishComment
   }
 ]
 
@@ -66,10 +74,12 @@ const router = createRouter({
   history: createWebHistory(),
   routes
 })
+
+// 路由守卫
 router.beforeEach((to, from, next) => {
   const isAuthenticated = localStorage.getItem('auth') === 'true'
   if (to.meta.requiresAuth && !isAuthenticated) {
-    next('/')
+    next('/') // 未登录跳转登录页
   } else {
     next()
   }
