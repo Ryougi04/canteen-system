@@ -10,7 +10,7 @@
         <img :src="`src/assets/${dish.image}.jpg`" alt="dish image" class="dish-image" />
         <div class="dish-info">
           <h2 class="dish-name">{{ dish.dish_name }}</h2>
-          <p class="dish-rating">评分：{{ dish.rating }} / 5</p>
+          <p class="dish-rating">评分：{{ dish.rating.toFixed(1) }} / 5</p>
           <p class="dish-likes">👍 {{ dish.rating_num }}</p>
         </div>
       </div>
