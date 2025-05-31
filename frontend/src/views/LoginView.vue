@@ -27,12 +27,12 @@ const password = ref('')
 const router = useRouter()
 
 const handleLogin = () => {
-  // if (username.value === 'admin' && password.value === '123456') {
-  //   localStorage.setItem('auth', 'true')
-  //   router.push('/home')
-  // } else {
-  //   alert('用户名或密码错误')
-  // }
+  if (username.value === 'admin' && password.value === '123456') {
+    localStorage.setItem('auth', 'true')
+    router.push('/home')
+  } else {
+    alert('用户名或密码错误')
+  }
   console.log(username.value)
   axios.get(`http://localhost:8080/user/get?username=${username.value}`)
       .then((res) => {
