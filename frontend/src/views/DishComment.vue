@@ -8,9 +8,9 @@
     <!-- 标题 -->
     <h1 class="title">菜品点评</h1>
 
-    <!-- 菜品展示 -->
+    <!-- 菜品点评 -->
     <div class="dish-card">
-      <img :src="`src/assets/${dish.image}.jpg`" alt="dish" class="dish-image" />
+      <img :src="`src/assets/${dish.image}.jpg`" alt="dish image" class="dish-image" />
       <div class="dish-info">
         <h2 class="dish-name">{{ dish.dish_name }}</h2>
         <p class="dish-description">{{ dish.description }}</p>
@@ -20,10 +20,10 @@
     <!-- 评论列表 -->
     <div class="comment-list">
       <div v-for="(comment, index) in comments" :key="index" class="comment-item">
-        <img :src="comment.avatar || defaultAvatar" alt="用户头像" class="comment-avatar" />
+<!--        <img :src="comment.avatar || defaultAvatar" alt="user avatar" class="comment-avatar" />-->
         <div class="comment-content">
-          <span class="comment-user">{{ comment.user }}：</span>
-          <span class="comment-text">{{ comment.text }}</span>
+          <span class="comment-user">{{ comment.username === this.username ? '你' : comment.username }}：</span>
+          <span class="comment-text">{{ comment.content }}</span>
         </div>
       </div>
     </div>
@@ -42,61 +42,52 @@
 </template>
 
 <script>
+import axios from "axios";
+
 export default {
   name: 'DishReview',
   data() {
     return {
-      dish: {
-        dish_id: 1,
-        dish_name: '红烧肉',
-        image: 'hongshaorou',
-        description: '色泽红亮，肥而不腻，入口即化的传统美食。'
-      },
-      defaultAvatar: 'src/assets/default-avatar.png',
-      comments: [
-        {
-          user: '小张',
-          text: '这道菜真的很好吃！',
-          avatar: 'src/assets/avatar1.jpg'
-        },
-        {
-          user: '小李',
-          text: '感觉有点咸，但还可以。',
-          avatar: 'src/assets/avatar2.jpg'
-        },
-        {
-          user: '小王',
-          text: '超喜欢这个味道！',
-          avatar: '' // 没有头像时会显示默认头像
-        },
-        {
-          user: '小张',
-          text: '这道菜真的很好吃！',
-          avatar: 'src/assets/avatar1.jpg'
-        },
-        {
-          user: '小李',
-          text: '感觉有点咸，但还可以。',
-          avatar: 'src/assets/avatar2.jpg'
-        },
-        {
-          user: '小王',
-          text: '超喜欢这个味道！',
-          avatar: '' // 没有头像时会显示默认头像
-        }
-      ],
+      dishID: this.$route.params.id,
+      dish: {},
+      username: sessionStorage.getItem('username'),
+      // defaultAvatar: 'src/assets/image.jpg',
+      comments: [],
       newComment: ''
     };
+  },
+  mounted() {
+    axios.get(`http://localhost:8080/dish/getById?dish_id=${this.dishID}`)
+        .then((res) => {
+          if(res.data.code === 200) {
+            this.dish = res.data.dish;
+          }
+        })
+        .catch(console.error)
+    axios.get(`http://localhost:8080/comment/getById?dish_id=${this.dishID}`)
+        .then((res) => {
+          if(res.data.code === 200) {
+            this.comments = res.data.comment
+          }
+        })
+        .catch(console.error)
   },
   methods: {
     submitComment() {
       if (this.newComment.trim()) {
-        this.comments.push({ user: '你', text: this.newComment });
-        this.newComment = '';
+        axios.post(`http://localhost:8080/comment/add?content=${this.newComment}&dish_id=${this.dishID}&username=${this.username}`)
+            .then((res) => {
+              if(res.data.code === 200) {
+                console.log(res.data.msg)
+              }
+            })
+            .catch(console.error)
+        this.comments.push({ username: this.username, content: this.newComment })
+        this.newComment = ''
       }
     },
     goToRanking() {
-      this.$router.push({ name: 'DishRanking' });
+      this.$router.push({ name: 'DishRanking' })
     }
   }
 }

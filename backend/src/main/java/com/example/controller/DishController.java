@@ -22,6 +22,14 @@ public class DishController {
         json.put("dish", dishMapper.selectList(null));
         return json;
     }
+    @GetMapping("/getById")
+    @ResponseBody
+    public Map<String,Object> getById(@RequestParam("dish_id") String dish_id){
+        Map<String,Object> json = new HashMap<>();
+        json.put("code", 200);
+        json.put("dish", dishMapper.selectById(dish_id));
+        return json;
+    }
     @PostMapping("/update")
     @ResponseBody
     public Map<String,Object> update(@RequestParam("dish_id") String dish_id, @RequestParam("rating") float rating, @RequestParam("flag") boolean flag, @RequestParam("last_rating") float last_rating){
@@ -38,8 +46,8 @@ public class DishController {
         }
         dish.rating += (rating - dish.rating) / dish.rating_num;
         dishMapper.updateById(dish);
-        json.put("code",200);
-        json.put("msg","success");
+        json.put("code", 200);
+        json.put("msg", "success");
         return json;
     }
 }
