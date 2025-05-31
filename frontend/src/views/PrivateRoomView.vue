@@ -53,7 +53,7 @@ export default {
     async submitReservation() {
       axios.post(`http://localhost:8080/private-room/add?name=${this.form.name}&phone=${this.form.phone}&date=${this.form.date}&roomType=${this.form.roomType}`)
           .then((res) => {
-            if(res.data.code == 200) {
+            if(res.data.code === 200) {
               // ElMessage.success(res.data.msg);
               this.successMessage = '预约提交成功！我们将尽快与您联系。';
               this.form = { name: '', phone: '', date: '', roomType: 'small' };
