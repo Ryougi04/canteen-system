@@ -5,6 +5,7 @@ import CanteenDetailView from './views/CanteenDetailView.vue'
 import PrivateRoomView from './views/PrivateRoomView.vue'
 import NutritionAdvice from './views/NutritionAdvice.vue'
 import DishRanking from "./views/DishRanking.vue";
+import DishComment from "./views/DishComment.vue";
 
 const routes = [
   {
@@ -53,6 +54,11 @@ const routes = [
     path: '/',
     name: 'login',
     component: () => import('./views/LoginView.vue')
+  },
+  {
+    path: '/comment/:id',
+    name: 'comment',
+    component: DishComment
   }
 ]
 
