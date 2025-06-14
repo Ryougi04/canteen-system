@@ -19,4 +19,5 @@ public class User {
   String college;
   String phone;
   String avatar;
+  boolean admin;
 }

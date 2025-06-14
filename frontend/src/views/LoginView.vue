@@ -27,21 +27,25 @@ const password = ref('')
 const router = useRouter()
 
 const handleLogin = () => {
-  if (username.value === 'admin' && password.value === '123456') {
-    localStorage.setItem('auth', 'true')
-    sessionStorage.setItem('username', username.value);
-    router.push('/home')
-  } else {
-    alert('用户名或密码错误')
-  }
-  console.log(username.value)
+  // if (username.value === 'admin' && password.value === '123456') {
+  //   localStorage.setItem('auth', 'true')
+  //   sessionStorage.setItem('username', username.value);
+  //   router.replace('/home')
+  // } else {
+  //   alert('用户名或密码错误')
+  // }
   axios.get(`http://localhost:8080/user/get?username=${username.value}`)
       .then((res) => {
-        if(res.data.code === 200 && res.data.user.password === password.value) {
+        if (res.data.code === 200 && res.data.user.password === password.value) {
           localStorage.setItem('auth', 'true')
           sessionStorage.setItem("username", username.value)
-          router.push('/home')
-        } else {
+          if (res.data.user.admin) {
+            router.replace('/admin')
+          } else {
+            router.replace('/home')
+          }
+        }
+else {
           alert("用户名或密码错误！")
         }
       })
