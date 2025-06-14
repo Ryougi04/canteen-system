@@ -17,14 +17,14 @@
           class="dish-card"
           @click="goToManage(dish.dish_id)"
       >
-        <img :src="`src/assets/${dish.image}.jpg`" alt="dish image" class="dish-image" />
+        <img :src='`src/assets/${dish.image}.jpg`' alt="dish image" class="dish-image" />
         <div class="dish-info">
           <h2 class="dish-name">{{ dish.dish_name }}</h2>
         </div>
       </div>
 
       <!-- 添加菜品卡片 -->
-      <div class="dish-card add-dish-card" @click="goToManage(dishes.length)">
+      <div class="dish-card add-dish-card" @click="goToManage(0)">
         <img :src="`src/assets/add.png`" alt="dish image" class="dish-image" />
         <div class="dish-info">
           <h2 class="dish-name">添加菜品</h2>
@@ -84,16 +84,17 @@ export default {
     axios.get("http://localhost:8080/dish/getAll")
         .then((res) => {
           if(res.data.code === 200) {
-            this.dishes = res.data.dish.sort((a, b) => b.rating - a.rating);
+            this.dishes = res.data.dish;
           }
         })
         .catch(console.error)
   },
   methods: {
     goToHome() {
-      this.$router.push({ name: 'admin' });
+      this.$router.replace({ name: 'admin' });
     },
     goToManage(dishID) {
+      console.log(dishID);
       this.$router.push({ name: 'manage', params: { id: dishID } })
     }
   },

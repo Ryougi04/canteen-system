@@ -24,7 +24,7 @@ public class DishController {
     }
     @GetMapping("/getById")
     @ResponseBody
-    public Map<String,Object> getById(@RequestParam("dish_id") String dish_id){
+    public Map<String,Object> getById(@RequestParam("dish_id") Integer dish_id){
         Map<String,Object> json = new HashMap<>();
         json.put("code", 200);
         json.put("dish", dishMapper.selectById(dish_id));
@@ -32,7 +32,7 @@ public class DishController {
     }
     @PostMapping("/update")
     @ResponseBody
-    public Map<String,Object> update(@RequestParam("dish_id") String dish_id, @RequestParam("rating") float rating, @RequestParam("flag") boolean flag, @RequestParam("last_rating") float last_rating){
+    public Map<String,Object> update(@RequestParam("dish_id") Integer dish_id, @RequestParam("rating") float rating, @RequestParam("flag") boolean flag, @RequestParam("last_rating") float last_rating){
         Map<String,Object> json = new HashMap<>();
         Dish dish = dishMapper.selectById(dish_id);
         if(flag) {
@@ -46,6 +46,39 @@ public class DishController {
         }
         dish.rating += (rating - dish.rating) / dish.rating_num;
         dishMapper.updateById(dish);
+        json.put("code", 200);
+        json.put("msg", "success");
+        return json;
+    }
+    @PostMapping("/add")
+    @ResponseBody
+    public Map<String,Object> add(@RequestParam("dish_name") String dish_name, @RequestParam("description") String description){
+        Map<String,Object> json = new HashMap<>();
+        Dish dish = new Dish();
+        dish.setDish_name(dish_name);
+        dish.setDescription(description);
+        dishMapper.insert(dish);
+        json.put("code", 200);
+        json.put("msg", "success");
+        return json;
+    }
+    @PostMapping("/modify")
+    @ResponseBody
+    public Map<String,Object> update(@RequestParam("dish_id") Integer dish_id, @RequestParam("dish_name") String dish_name, @RequestParam("description") String description){
+        Map<String,Object> json = new HashMap<>();
+        Dish dish = dishMapper.selectById(dish_id);
+        dish.setDish_name(dish_name);
+        dish.setDescription(description);
+        dishMapper.updateById(dish);
+        json.put("code", 200);
+        json.put("msg", "success");
+        return json;
+    }
+    @PostMapping("/delete")
+    @ResponseBody
+    public Map<String,Object> delete(@RequestParam("dish_id") Integer dish_id){
+        Map<String,Object> json = new HashMap<>();
+        dishMapper.deleteById(dish_id);
         json.put("code", 200);
         json.put("msg", "success");
         return json;

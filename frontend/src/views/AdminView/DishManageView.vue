@@ -47,18 +47,18 @@ export default {
     return {
       dishID: this.$route.params.id,
       dish: {
-        dish_id: 1,
-        dish_name: '红烧肉',
-        image: 'hongshaorou',
-        description: '红烧肉是一道传统名菜，色泽红亮，入口即化，肥而不腻，深受食客喜爱。'
+        // dish_id: 1,
+        // dish_name: '红烧肉',
+        // image: 'hongshaorou',
+        // description: '红烧肉是一道传统名菜，色泽红亮，入口即化，肥而不腻，深受食客喜爱。'
       },
       selectedImageFile: null,
       username: sessionStorage.getItem('username') || '小王',
       comments: [
-        { username: '小张', content: '味道太赞了，肉入口即化，五星推荐！' },
-        { username: '小李', content: '有点油，但总体还不错，搭配米饭正合适。' },
-        { username: '小王', content: '喜欢这种甜咸口味，就是分量再多点就好了~' },
-        { username: '张三', content: '我觉得偏甜，不太适合我口味。' }
+        // { username: '小张', content: '味道太赞了，肉入口即化，五星推荐！' },
+        // { username: '小李', content: '有点油，但总体还不错，搭配米饭正合适。' },
+        // { username: '小王', content: '喜欢这种甜咸口味，就是分量再多点就好了~' },
+        // { username: '张三', content: '我觉得偏甜，不太适合我口味。' }
       ],
       deletedComments: [],
       newComment: ''
@@ -74,20 +74,22 @@ export default {
     }
   },
   mounted() {
-    axios.get(`http://localhost:8080/dish/getById?dish_id=${this.dishID}`)
-        .then((res) => {
-          if(res.data.code === 200) {
-            this.dish = res.data.dish;
-          }
-        })
-        .catch(console.error);
-    axios.get(`http://localhost:8080/comment/getById?dish_id=${this.dishID}`)
-        .then((res) => {
-          if(res.data.code === 200) {
-            this.comments = res.data.comment;
-          }
-        })
-        .catch(console.error);
+    if (this.dishID !== '0') {
+      axios.get(`http://localhost:8080/dish/getById?dish_id=${this.dishID}`)
+          .then((res) => {
+            if(res.data.code === 200) {
+              this.dish = res.data.dish;
+            }
+          })
+          .catch(console.error);
+      axios.get(`http://localhost:8080/comment/getById?dish_id=${this.dishID}`)
+          .then((res) => {
+            if(res.data.code === 200) {
+              this.comments = res.data.comment;
+            }
+          })
+          .catch(console.error);
+    }
   },
   methods: {
     triggerFileInput() {
@@ -127,7 +129,11 @@ export default {
       // 2. 上传图片后再更新菜品信息
       uploadImage()
           .then(() => {
-            return axios.post("http://localhost:8080/dish/update", this.dish);
+            if (this.dishID === '0') {
+              return axios.post(`http://localhost:8080/dish/add?dish_name=${this.dish.dish_name}&description=${this.dish.description}`);
+            } else {
+              return axios.post(`http://localhost:8080/dish/modify?dish_id=${this.dishID}&dish_name=${this.dish.dish_name}&description=${this.dish.description}`);
+            }
           })
           .then(res => {
             if (res.data.code === 200) {
@@ -138,11 +144,7 @@ export default {
 
       // 3. 删除评论
       this.deletedComments.forEach(comment => {
-        axios.post(`http://localhost:8080/comment/delete`, {
-          dish_id: this.dishID,
-          username: comment.username,
-          content: comment.content
-        }).catch(console.error);
+        axios.post(`http://localhost:8080/comment/delete?comment_id=${comment.comment_id}`).catch(console.error);
       });
 
       this.deletedComments = [];
@@ -152,24 +154,22 @@ export default {
         return;
       }
 
-      axios.post("http://localhost:8080/dish/delete", {
-        dish_id: this.dishID
-      })
+      axios.post(`http://localhost:8080/dish/delete?dish_id=${this.dishID}`)
           .then(res => {
             if (res.data.code === 200) {
               alert("菜品已删除！");
-              this.$router.push({ name: 'overview' });
+              this.$router.replace({ name: 'overview' });
             } else {
               alert("删除失败：" + res.data.msg);
             }
           })
           .catch(error => {
             console.error(error);
-            alert("删除过程中发生错误！");
+            alert("删除过程发生错误！");
           });
     },
     goToRanking() {
-      this.$router.push({ name: 'overview' });
+      this.$router.replace({ name: 'overview' });
     }
   }
 };

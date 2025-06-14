@@ -12,8 +12,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @TableName(value = "dish", autoResultMap = true)
 public class Dish {
-  @TableId(value = "dish_id")
-  String dish_id;
+  @TableId(value = "dish_id", type = IdType.AUTO)
+  private Integer dish_id;
   String dish_name;
   int price;
   String description;
