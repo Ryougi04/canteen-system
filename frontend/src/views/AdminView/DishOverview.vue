@@ -10,10 +10,24 @@
 
     <!-- 菜品展示 -->
     <div class="dish-list">
-      <div v-for="(dish, index) in dishes" :key="dish.dish_id" class="dish-card" @click="goToComment(dish.dish_id)">
+      <!-- 菜品卡片 -->
+      <div
+          v-for="(dish, index) in dishes"
+          :key="dish.dish_id"
+          class="dish-card"
+          @click="goToManage(dish.dish_id)"
+      >
         <img :src="`src/assets/${dish.image}.jpg`" alt="dish image" class="dish-image" />
         <div class="dish-info">
           <h2 class="dish-name">{{ dish.dish_name }}</h2>
+        </div>
+      </div>
+
+      <!-- 添加菜品卡片 -->
+      <div class="dish-card add-dish-card" @click="goToManage(dishes.length)">
+        <img :src="`src/assets/add.png`" alt="dish image" class="dish-image" />
+        <div class="dish-info">
+          <h2 class="dish-name">添加菜品</h2>
         </div>
       </div>
     </div>
@@ -79,7 +93,7 @@ export default {
     goToHome() {
       this.$router.push({ name: 'admin' });
     },
-    goToComment(dishID) {
+    goToManage(dishID) {
       this.$router.push({ name: 'manage', params: { id: dishID } })
     }
   },
