@@ -3,9 +3,12 @@ import HomeView from './views/HomeView.vue'
 import CanteenListView from './views/CanteenListView.vue'
 import CanteenDetailView from './views/CanteenDetailView.vue'
 import PrivateRoomView from './views/PrivateRoomView.vue'
-import NutritionAdvice from './views/NutritionAdvice.vue'
+import NutritionAdviceView from './views/NutritionAdviceView.vue'
 import DishRanking from "./views/DishRanking.vue";
 import DishComment from "./views/DishComment.vue";
+import AdminDashboard from './views/AdminView/AdminDashboard.vue'
+import DishOverview from "@/views/AdminView/DishOverview.vue";
+import DishManage from "@/views/AdminView/DishManage.vue";
 
 const routes = [
   {
@@ -42,7 +45,7 @@ const routes = [
   {
     path: '/nutrition',
     name: 'NutritionAdvice',
-    component: NutritionAdvice,
+    component: NutritionAdviceView,
     meta: { requiresAuth: true } // ✅
   },
   {
@@ -62,6 +65,24 @@ const routes = [
     name: 'comment',
     component: DishComment,
     meta: { requiresAuth: true } // ✅ 评论应登录后才能写
+  },
+  {
+    path: '/admin',
+    name: 'admin',
+    component: AdminDashboard,
+    meta: { requiresAuth: true }
+  },
+  {
+    path: '/overview',
+    name: 'overview',
+    component: DishOverview,
+    meta: { requiresAuth: true }
+  },
+  {
+    path: '/manage',
+    name: 'manage',
+    component: DishManage,
+    meta: { requiresAuth: true }
   },
   {
     path: '/',
