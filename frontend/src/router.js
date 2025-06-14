@@ -79,7 +79,7 @@ const routes = [
     meta: { requiresAuth: true }
   },
   {
-    path: '/manage',
+    path: '/manage/:id',
     name: 'manage',
     component: DishManageView,
     meta: { requiresAuth: true }
