@@ -134,7 +134,6 @@ export default {
         .then((res) => {
           if(res.data.code === 200) {
             this.user = res.data.user;
-            console.log(this.user)
           }
         })
         .catch(console.error)
@@ -166,12 +165,21 @@ export default {
     },
     submitPasswordChange() {
       if (this.passwordForm.newPassword !== this.passwordForm.confirmPassword) {
-        alert('两次输入的新密码不一致')
+        alert('两次输入的新密码不一致！')
         return
       }
 
-      // 这里调用API修改密码
-      alert('密码修改成功')
+      axios.post(`http://localhost:8080/user/changePassword?username=${this.username}&curPassword=${this.passwordForm.currentPassword}&newPassword=${this.passwordForm.newPassword}`)
+          .then((res) => {
+            if(res.data.code === 200) {
+              alert('密码修改成功！')
+            } else if(res.data.code === 400) {
+              alert('原密码错误，请检查后重试。')
+            } else {
+              alert('密码修改失败！')
+            }
+          })
+
       this.showPasswordModal = false
       this.passwordForm = {
         currentPassword: '',
