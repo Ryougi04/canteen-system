@@ -80,7 +80,7 @@ export default {
   },
   methods: {
     goToHome() {
-      this.$router.push({ name: 'home' });
+      this.$router.replace({ name: 'home' });
     },
     goToComment(dishID) {
       this.$router.push({ name: 'comment', params: { id: dishID } })
