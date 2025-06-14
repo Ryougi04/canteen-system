@@ -64,7 +64,7 @@ public class DishController {
     }
     @PostMapping("/modify")
     @ResponseBody
-    public Map<String,Object> update(@RequestParam("dish_id") Integer dish_id, @RequestParam("dish_name") String dish_name, @RequestParam("description") String description){
+    public Map<String,Object> modify(@RequestParam("dish_id") Integer dish_id, @RequestParam("dish_name") String dish_name, @RequestParam("description") String description){
         Map<String,Object> json = new HashMap<>();
         Dish dish = dishMapper.selectById(dish_id);
         dish.setDish_name(dish_name);
