@@ -9,6 +9,7 @@ import DishComment from "./views/DishComment.vue";
 import AdminView from './views/AdminView/AdminView.vue'
 import DishOverview from "@/views/AdminView/DishOverview.vue";
 import DishManageView from "@/views/AdminView/DishManageView.vue";
+import RoomReserveView from "@/views/AdminView/RoomReserveView.vue";
 
 const routes = [
   {
@@ -82,6 +83,12 @@ const routes = [
     path: '/manage/:id',
     name: 'manage',
     component: DishManageView,
+    meta: { requiresAuth: true }
+  },
+  {
+    path: '/reserve',
+    name: 'reserve',
+    component: RoomReserveView,
     meta: { requiresAuth: true }
   },
   {

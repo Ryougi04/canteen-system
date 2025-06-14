@@ -22,7 +22,7 @@
         </template>
       </DashboardCard>
 
-      <DashboardCard title="包间预约" :count="roomBookingCount">
+      <DashboardCard title="包间预约" :count="roomBookingCount" @click="goToReserve" style="cursor: pointer;">
         <template #icon>
           <svg width="30" height="30" fill="none" stroke="#4a90e2" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
             <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
@@ -31,7 +31,7 @@
         </template>
       </DashboardCard>
 
-      <DashboardCard title="活跃用户" :count="activeUserCount">
+      <DashboardCard title="菜品预订" :count="activeUserCount">
         <template #icon>
           <svg width="30" height="30" fill="none" stroke="#4a90e2" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
             <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
@@ -57,6 +57,9 @@ const activeUserCount = ref(38)
 
 const goToOverview = () => {
   router.push('/overview')
+}
+const goToReserve = () => {
+  router.push('/reserve')
 }
 </script>
 
