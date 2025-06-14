@@ -36,7 +36,15 @@ public class CommentController {
         comment.setDish_id(dish_id);
         comment.setUsername(username);
         commentMapper.insert(comment);
-
+        json.put("code", 200);
+        json.put("msg", "success");
+        return json;
+    }
+    @PostMapping("/delete")
+    @ResponseBody
+    public Map<String,Object> delete(@RequestParam("comment_id") Integer comment_id){
+        Map<String,Object> json = new HashMap<>();
+        commentMapper.deleteById(comment_id);
         json.put("code", 200);
         json.put("msg", "success");
         return json;
