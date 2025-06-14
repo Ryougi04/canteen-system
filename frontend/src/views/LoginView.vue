@@ -44,8 +44,7 @@ const handleLogin = () => {
           } else {
             router.replace('/home')
           }
-        }
-else {
+        } else {
           alert("用户名或密码错误！")
         }
       })
