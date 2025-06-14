@@ -6,9 +6,9 @@ import PrivateRoomView from './views/PrivateRoomView.vue'
 import NutritionAdviceView from './views/NutritionAdviceView.vue'
 import DishRanking from "./views/DishRanking.vue";
 import DishComment from "./views/DishComment.vue";
-import AdminDashboard from './views/AdminView/AdminDashboard.vue'
+import AdminView from './views/AdminView/AdminView.vue'
 import DishOverview from "@/views/AdminView/DishOverview.vue";
-import DishManage from "@/views/AdminView/DishManage.vue";
+import DishManageView from "@/views/AdminView/DishManageView.vue";
 
 const routes = [
   {
@@ -69,7 +69,7 @@ const routes = [
   {
     path: '/admin',
     name: 'admin',
-    component: AdminDashboard,
+    component: AdminView,
     meta: { requiresAuth: true }
   },
   {
@@ -81,7 +81,7 @@ const routes = [
   {
     path: '/manage',
     name: 'manage',
-    component: DishManage,
+    component: DishManageView,
     meta: { requiresAuth: true }
   },
   {
