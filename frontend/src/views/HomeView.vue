@@ -1,14 +1,13 @@
 <template>
+  <div class="background-shapes">
+    <div class="shape shape-1"></div>
+    <div class="shape shape-2"></div>
+    <div class="shape shape-3"></div>
+  </div>
   <div class="home-container">
-    <div class="background-shapes">
-      <div class="shape shape-1"></div>
-      <div class="shape shape-2"></div>
-      <div class="shape shape-3"></div>
-    </div>
-    
     <h1 class="title">哈工大食堂服务系统</h1>
     <p class="subtitle">便捷用餐，尽在掌握</p>
-    
+
     <div class="menu-grid">
       <MenuButton text="食堂一览" to="/canteens">
         <template #icon>
@@ -184,16 +183,16 @@ export default {
   .home-container {
     padding: 40px 15px;
   }
-  
+
   .title {
     font-size: 2rem;
   }
-  
+
   .subtitle {
     font-size: 1rem;
     margin-bottom: 40px;
   }
-  
+
   .menu-grid {
     gap: 20px;
   }
@@ -203,11 +202,11 @@ export default {
   .home-container {
     padding: 30px 10px;
   }
-  
+
   .title {
     font-size: 1.75rem;
   }
-  
+
   .menu-grid {
     grid-template-columns: 1fr;
     gap: 15px;
