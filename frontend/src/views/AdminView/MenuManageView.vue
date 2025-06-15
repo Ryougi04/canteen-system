@@ -8,7 +8,7 @@
       返回主页
     </button>
 
-    <h1 class="title">每日菜单</h1>
+    <h1 class="title">菜单管理</h1>
 
     <div class="filter-section">
       <div class="filter-item">
@@ -40,7 +40,10 @@
     </div>
 
     <div class="menu-content" v-if="menuItems.length > 0">
-      <h2 class="menu-title">{{ selectedCanteenName }} {{ selectedFloor }}层 菜单</h2>
+      <div class="menu-header">
+        <h2 class="menu-title">{{ selectedCanteenName }} {{ selectedFloor }}层 菜单</h2>
+        <button class="save-button" @click="savePriceChanges">保存修改</button>
+      </div>
       <p class="menu-date">{{ formatDate(selectedDate) }}</p>
 
       <div class="menu-categories">
@@ -49,16 +52,33 @@
           <ul>
             <li v-for="item in getItemsByCategory(category)" :key="item.dish_id" class="dish-item">
               <span class="dish-name">{{ item.dish_name }}</span>
-              <span class="dish-price">{{ item.price }}元</span>
-              <div class="rating">
-                <span
-                  v-for="star in 5"
-                  :key="star"
-                  class="star"
-                  :class="{ filled: item.rating >= star }"
-                  @click="rateDish(item.dish_id, parseFloat(star))"
-                >★</span>
-              </div>
+              <input
+                  type="number"
+                  step="0.1"
+                  v-model.number="item.price"
+                  class="price-input"
+              /><span>元</span>
+              <button class="delete-button" @click="deleteDish(item.dish_id)">删除</button>
+            </li>
+            <li class="dish-item">
+              <select class="narrow-rounded-select" v-model="addDishForm[category].dish_id" @change="handleDishSelect(category, addDishForm[category].dish_id)">
+                <option value="">请选择菜品</option>
+                <option
+                    v-for="dish in dishes"
+                    :key="dish.dish_id"
+                    :value="dish.dish_id"
+                >
+                  {{ dish.dish_name }}
+                </option>
+              </select>
+              <input
+                  type="number"
+                  step="0.1"
+                  v-model.number="addDishForm[category].price"
+                  class="price-input"
+                  disabled
+              /><span>元</span>
+              <button class="save-button" @click="addDishToMenu(category)">增加</button>
             </li>
           </ul>
         </div>
@@ -75,7 +95,7 @@
 import axios from 'axios'
 
 export default {
-  name: 'DailyMenuView',
+  name: 'MenuManageView',
   data() {
     return {
       dishRatings:{},
@@ -113,6 +133,12 @@ export default {
         { dish_id: 'n1', dish_name: '酸辣粉', category: '夜宵', price: 7.5, canteen_id: '3', floor: 1 },
         { dish_id: 'n2', dish_name: '鸡肉卷', category: '夜宵', price: 8.0, canteen_id: '3', floor: 1 }
       ],
+      addDishForm: {
+        早餐: { dish_id: '', price: 0 },
+        午餐: { dish_id: '', price: 0 },
+        晚餐: { dish_id: '', price: 0 },
+        夜宵: { dish_id: '', price: 0 }
+      },
       menuItems: [],
       menuCategories: ['早餐', '午餐', '晚餐', '夜宵']
     }
@@ -139,7 +165,7 @@ export default {
   },
   methods: {
     goToHome() {
-      this.$router.push({ name: 'home' })
+      this.$router.push({ name: 'admin' })
     },
     formatDate(dateStr) {
       const date = new Date(dateStr)
@@ -164,18 +190,61 @@ export default {
         item.rating = this.dishRatings[item.id] || 0
       })
     },
-    rateDish(dishId, rating) {
-      const flag = dishId in this.dishRatings;
-      const dish = this.menuItems.find(item => item.dish_id === dishId)
-      dish.rating = rating
-      axios.post(`http://localhost:8080/dish/update?dish_id=${dishId}&rating=${rating}&flag=${!flag}&last_rating=${flag ? this.dishRatings[dishId] : 0.0}`)
-          .then((res) => {
-            if(res.data.code === 200) {
-              console.log(res.data.msg)
+    deleteDish(dishId) {
+      // 可选确认框
+      if (!confirm('确定要删除该菜品吗？')) return;
+
+      // 删除接口调用（你可以根据后端接口调整）
+      axios.delete(`http://localhost:8080/dish/delete?dish_id=${dishId}`)
+          .then(res => {
+            if (res.data.code === 200) {
+              this.dishes = this.dishes.filter(item => item.dish_id !== dishId);
+              this.fetchMenu(); // 重新筛选当前菜单
+              alert('删除成功');
             }
           })
-          .catch(console.error)
-      this.dishRatings[dishId] = rating
+          .catch(console.error);
+    },
+    savePriceChanges() {
+      const updatedPrices = this.menuItems.map(item => ({
+        dish_id: item.dish_id,
+        price: item.price
+      }));
+      axios.put("http://localhost:8080/dish/updatePrices", updatedPrices)
+          .then(res => {
+            if (res.data.code === 200) {
+              alert("价格已成功保存！");
+            } else {
+              alert("保存失败，请稍后重试。");
+            }
+          })
+          .catch(err => {
+            console.error(err);
+            alert("发生错误，无法保存价格。");
+          });
+    },
+    addDishToMenu(category) {
+      const form = this.addDishForm[category];
+      const dish = this.dishes.find(d => d.dish_id === form.dish_id);
+      if (!dish) return alert("请选择菜品");
+
+      const alreadyExists = this.menuItems.some(
+          item => item.dish_id === dish.dish_id && item.category === category
+      );
+      if (alreadyExists) return alert("该菜品已存在于菜单中");
+
+      this.menuItems.push({ ...dish, category });
+
+      form.dish_id = '';
+      form.price = 0;
+    },
+
+    handleDishSelect(category, dishId) {
+      const dish = this.dishes.find(d => d.dish_id === dishId);
+      if (dish) {
+        this.addDishForm[category].dish_id = dishId;
+        this.addDishForm[category].price = dish.price;
+      }
     },
     getItemsByCategory(category) {
       return this.menuItems.filter(item => item.category === category)
@@ -257,14 +326,12 @@ export default {
 
 .menu-title {
   color: #000; /* ✅ 黑色 */
-  margin-top: 0;
-  border-bottom: 1px solid #eee;
   padding-bottom: 10px;
 }
 
 .menu-date {
   color: #000; /* ✅ 黑色 */
-  margin-top: -10px;
+  margin-top: 10px;
   margin-bottom: 20px;
 }
 
@@ -299,21 +366,6 @@ export default {
   margin: 6px 0;
 }
 
-.rating {
-  display: inline-block;
-  cursor: pointer;
-}
-
-.star {
-  font-size: 18px;
-  color: #ccc;
-  margin-left: 2px;
-  transition: color 0.2s;
-}
-
-.star.filled {
-  color: gold;
-}
 .menu-category li {
   display: flex;
   justify-content: space-between;
@@ -323,10 +375,6 @@ export default {
 
 .dish-name {
   font-weight: 500;
-  color: #000; /* ✅ 黑色 */
-}
-
-.dish-price {
   color: #000; /* ✅ 黑色 */
 }
 
@@ -342,9 +390,76 @@ export default {
     align-items: center;
   }
 
-
   .menu-categories {
     grid-template-columns: 1fr;
   }
 }
+
+.delete-button {
+  background-color: #ff4d4f;
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 13px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.delete-button:hover {
+  background-color: #ff7875;
+}
+
+.menu-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+  border-bottom: 1px solid #eee;
+}
+
+.save-button {
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.save-button:hover {
+  background-color: #45a049;
+}
+
+@media (max-width: 768px) {
+  .save-button {
+    white-space: pre-line; /* 允许 \n 换行 */
+    word-break: break-word;
+    padding: 6px 8px;
+    font-size: 13px;
+    text-align: center;
+    height: auto;
+    line-height: 1.2;
+  }
+}
+
+.price-input {
+  width: 45px;
+  padding: 4px 6px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.narrow-rounded-select {
+  width: 100px;
+  border-radius: 6px;
+  padding: 6px 10px;
+  border: 1px solid #ccc;
+  font-size: 14px;
+  appearance: none;
+  cursor: pointer;
+}
+
 </style>

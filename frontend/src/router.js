@@ -10,6 +10,7 @@ import AdminView from './views/AdminView/AdminView.vue'
 import DishOverview from "@/views/AdminView/DishOverview.vue";
 import DishManageView from "@/views/AdminView/DishManageView.vue";
 import RoomReserveView from "@/views/AdminView/RoomReserveView.vue";
+import MenuManageView from "@/views/AdminView/MenuManageView.vue";
 
 const routes = [
   {
@@ -83,6 +84,11 @@ const routes = [
     path: '/manage/:id',
     name: 'manage',
     component: DishManageView,
+    meta: { requiresAuth: true }
+  },{
+    path: '/menu',
+    name: 'menu',
+    component: MenuManageView,
     meta: { requiresAuth: true }
   },
   {

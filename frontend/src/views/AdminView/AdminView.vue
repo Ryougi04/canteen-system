@@ -12,7 +12,7 @@
         </template>
       </DashboardCard>
 
-      <DashboardCard title="今日菜单" :count="todayMenuCount">
+      <DashboardCard title="菜单管理" :count="todayMenuCount" @click="goToMenu" style="cursor: pointer;">
         <template #icon>
           <svg width="30" height="30" fill="none" stroke="#4a90e2" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
             <path d="M3 12h18"></path>
@@ -57,6 +57,9 @@ const activeUserCount = ref(38)
 
 const goToOverview = () => {
   router.push('/overview')
+}
+const goToMenu = () => {
+  router.push('/menu')
 }
 const goToReserve = () => {
   router.push('/reserve')
