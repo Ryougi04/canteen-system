@@ -1,22 +1,25 @@
+<!-- MenuButton.vue -->
 <template>
-  <router-link :to="to" class="menu-button">
-    <div class="icon-container">
-      <slot name="icon"></slot>
-    </div>
-    <span class="button-text">{{ text }}</span>
+  <router-link :to="to" class="menu-button" @click="handleClick">
+    <slot name="icon"></slot>
+    <span>{{ text }}</span>
   </router-link>
 </template>
 
 <script>
 export default {
+  name: 'MenuButton',
   props: {
-    text: {
-      type: String,
-      required: true
-    },
-    to: {
-      type: String,
-      default: '/'
+    text: String,
+    to: String
+  },
+  methods: {
+    handleClick() {
+      const audio = new Audio('/sounds/click.mp3');
+      audio.play().catch((e) => {
+        // 有些浏览器可能需要用户交互后才允许播放
+        console.warn('音效播放失败:', e);
+      });
     }
   }
 }
@@ -28,33 +31,33 @@ export default {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 20px;
-  background-color: #fff;
+  padding: 30px 20px;
   border-radius: 12px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  background: white;
   text-decoration: none;
-  color: #333;
   transition: all 0.3s ease;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  position: relative;
+  overflow: hidden;
+  border: 1px solid #c4e2f6; /* 添加淡蓝色边框 */
 }
 
 .menu-button:hover {
+  background: linear-gradient(to bottom, white, #f0f9ff);
   transform: translateY(-5px);
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
 }
 
-.icon-container {
-  width: 60px;
-  height: 60px;
-  margin-bottom: 10px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background-color: #f0f7ff;
-  border-radius: 50%;
+
+
+.icon-wrapper {
+  margin-bottom: 15px;
 }
 
 .button-text {
-  font-size: 16px;
+  font-size: 18px;
+  color: #34495e;
   font-weight: 500;
+  letter-spacing: 0.5px;
 }
 </style>

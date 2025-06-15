@@ -140,6 +140,7 @@ export default {
         .catch(console.error)
   },
   methods: {
+    
     goToHome() {
       this.$router.push({ name: 'home' })
     },
