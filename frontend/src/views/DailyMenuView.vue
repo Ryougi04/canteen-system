@@ -58,6 +58,13 @@
                   :class="{ filled: item.rating >= star }"
                   @click="rateDish(item.dish_id, parseFloat(star))"
                 >★</span>
+                <button
+                    class="book-button"
+                    :class="{ booked: isBooked(item.dish_id) }"
+                    @click="toggleBooking(item)"
+                >
+                  {{ isBooked(item.dish_id) ? '取消预订' : '预订' }}
+                </button>
               </div>
             </li>
           </ul>
@@ -79,6 +86,7 @@ export default {
   data() {
     return {
       dishRatings:{},
+      dishBookings: {},
       selectedDate: new Date().toISOString().split('T')[0],
       selectedCanteen: '1',
       selectedFloor: 1,
@@ -177,6 +185,22 @@ export default {
           .catch(console.error)
       this.dishRatings[dishId] = rating
     },
+    isBooked(dishId) {
+      return this.dishBookings[dishId] === true
+    },
+    toggleBooking(dish) {
+      const id = dish.dish_id
+      const currentlyBooked = this.dishBookings[id] === true
+
+      // ✅ 直接赋值即可，无需 this.$set
+      this.dishBookings[id] = !currentlyBooked
+
+      if (currentlyBooked) {
+        alert(`已取消 ${dish.dish_name} 的预订`)
+      } else {
+        alert(`你已预订 ${dish.dish_name}`)
+      }
+    },
     getItemsByCategory(category) {
       return this.menuItems.filter(item => item.category === category)
     }
@@ -270,7 +294,7 @@ export default {
 
 .menu-categories {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
   gap: 20px;
 }
 
@@ -346,5 +370,21 @@ export default {
   .menu-categories {
     grid-template-columns: 1fr;
   }
+}
+
+.book-button {
+  margin-left: 10px;
+  padding: 4px 10px;
+  background-color: #4CAF50;
+  border: none;
+  border-radius: 4px;
+  color: white;
+  font-size: 12px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.book-button.booked {
+  background-color: #f44336; /* 红色表示已预订，可取消 */
 }
 </style>
