@@ -16,7 +16,8 @@ import java.util.Date;
 public class PrivateRoom {
   @TableId(value = "reservation_id", type = IdType.AUTO)
   private Integer reservation_id;
-  String name;
+  String room_name;
+  String username;
   String phone;
   Date date;
   String type;
