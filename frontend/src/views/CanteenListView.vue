@@ -61,7 +61,7 @@ export default {
     },
     // 新增的返回主页方法
     goToHome() {
-      this.$router.push({ name: 'home' })
+      this.$router.replace({ name: 'home' })
     }
   }
 }

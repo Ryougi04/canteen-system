@@ -140,7 +140,7 @@ export default {
   },
   methods: {
     goToHome() {
-      this.$router.push({ name: 'home' })
+      this.$router.replace({ name: 'home' })
     },
     editAvatar() {
       // 实现头像上传逻辑
