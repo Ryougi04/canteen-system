@@ -98,28 +98,28 @@ export default {
       ],
       floors: [1, 2, 3],
       dishes: [
-        // 早餐
-        { dish_id: 'b1', dish_name: '豆浆油条', category: '早餐', price: 4.5, canteen_id: '1', floor: 1 },
-        { dish_id: 'b2', dish_name: '鸡蛋灌饼', category: '早餐', price: 5.0, canteen_id: '1', floor: 1 },
-        // 午餐
-        { dish_id: 'l1', dish_name: '宫保鸡丁', category: '午餐', price: 12.0, canteen_id: '1', floor: 1 },
-        { dish_id: 'l2', dish_name: '红烧茄子', category: '午餐', price: 9.0, canteen_id: '1', floor: 1 },
-        // 晚餐
-        { dish_id: 'd1', dish_name: '水煮鱼', category: '晚餐', price: 18.0, canteen_id: '1', floor: 1 },
-        { dish_id: 'd2', dish_name: '西红柿炒鸡蛋', category: '晚餐', price: 10.0, canteen_id: '1', floor: 1 },
-        { dish_id: 'd1', dish_name: '水煮鱼', category: '晚餐', price: 18.0, canteen_id: '1', floor: 1 },
-        { dish_id: 'd2', dish_name: '西红柿炒鸡蛋', category: '晚餐', price: 10.0, canteen_id: '1', floor: 1 },
-        // 夜宵
-        { dish_id: 'n1', dish_name: '酸辣粉', category: '夜宵', price: 7.5, canteen_id: '1', floor: 1 },
-        { dish_id: 'n2', dish_name: '鸡肉卷', category: '夜宵', price: 8.0, canteen_id: '1', floor: 1 },
-        { dish_id: 'l1', dish_name: '宫保鸡丁', category: '午餐', price: 12.0, canteen_id: '2', floor: 1 },
-        { dish_id: 'l2', dish_name: '红烧茄子', category: '午餐', price: 9.0, canteen_id: '2', floor: 1 },
-        // 晚餐
-        { dish_id: 'd1', dish_name: '水煮鱼', category: '晚餐', price: 18.0, canteen_id: '3', floor: 1 },
-        { dish_id: 'd2', dish_name: '西红柿炒鸡蛋', category: '晚餐', price: 10.0, canteen_id: '3', floor: 1 },
-        // 夜宵
-        { dish_id: 'n1', dish_name: '酸辣粉', category: '夜宵', price: 7.5, canteen_id: '3', floor: 1 },
-        { dish_id: 'n2', dish_name: '鸡肉卷', category: '夜宵', price: 8.0, canteen_id: '3', floor: 1 }
+        // // 早餐
+        // { dish_id: 'b1', dish_name: '豆浆油条', category: '早餐', price: 4.5, canteen_id: '1', floor: 1 },
+        // { dish_id: 'b2', dish_name: '鸡蛋灌饼', category: '早餐', price: 5.0, canteen_id: '1', floor: 1 },
+        // // 午餐
+        // { dish_id: 'l1', dish_name: '宫保鸡丁', category: '午餐', price: 12.0, canteen_id: '1', floor: 1 },
+        // { dish_id: 'l2', dish_name: '红烧茄子', category: '午餐', price: 9.0, canteen_id: '1', floor: 1 },
+        // // 晚餐
+        // { dish_id: 'd1', dish_name: '水煮鱼', category: '晚餐', price: 18.0, canteen_id: '1', floor: 1 },
+        // { dish_id: 'd2', dish_name: '西红柿炒鸡蛋', category: '晚餐', price: 10.0, canteen_id: '1', floor: 1 },
+        // { dish_id: 'd1', dish_name: '水煮鱼', category: '晚餐', price: 18.0, canteen_id: '1', floor: 1 },
+        // { dish_id: 'd2', dish_name: '西红柿炒鸡蛋', category: '晚餐', price: 10.0, canteen_id: '1', floor: 1 },
+        // // 夜宵
+        // { dish_id: 'n1', dish_name: '酸辣粉', category: '夜宵', price: 7.5, canteen_id: '1', floor: 1 },
+        // { dish_id: 'n2', dish_name: '鸡肉卷', category: '夜宵', price: 8.0, canteen_id: '1', floor: 1 },
+        // { dish_id: 'l1', dish_name: '宫保鸡丁', category: '午餐', price: 12.0, canteen_id: '2', floor: 1 },
+        // { dish_id: 'l2', dish_name: '红烧茄子', category: '午餐', price: 9.0, canteen_id: '2', floor: 1 },
+        // // 晚餐
+        // { dish_id: 'd1', dish_name: '水煮鱼', category: '晚餐', price: 18.0, canteen_id: '3', floor: 1 },
+        // { dish_id: 'd2', dish_name: '西红柿炒鸡蛋', category: '晚餐', price: 10.0, canteen_id: '3', floor: 1 },
+        // // 夜宵
+        // { dish_id: 'n1', dish_name: '酸辣粉', category: '夜宵', price: 7.5, canteen_id: '3', floor: 1 },
+        // { dish_id: 'n2', dish_name: '鸡肉卷', category: '夜宵', price: 8.0, canteen_id: '3', floor: 1 }
       ],
       menuItems: [],
       menuCategories: ['早餐', '午餐', '晚餐', '夜宵']
@@ -147,7 +147,7 @@ export default {
   },
   methods: {
     goToHome() {
-      this.$router.push({ name: 'home' })
+      this.$router.replace({ name: 'home' })
     },
     formatDate(dateStr) {
       const date = new Date(dateStr)
@@ -156,7 +156,7 @@ export default {
     generateDates() {
       const dates = []
       const today = new Date()
-      for (let i = 0; i < 7; i++) {
+      for (let i = 0; i < 2; i++) {
         const date = new Date(today)
         date.setDate(today.getDate() + i)
         dates.push(date.toISOString().split('T')[0])
@@ -165,7 +165,7 @@ export default {
     },
     fetchMenu() {
       this.menuItems = (this.dishes || []).filter(
-          item => item.canteen_id === this.selectedCanteen && item.floor === this.selectedFloor
+          item => (item.canteen_id && item.canteen_id.includes(this.selectedCanteen)) && (item.floor && item.floor.includes(this.selectedFloor))
       )
 
       this.menuItems.forEach(item => {
@@ -176,7 +176,7 @@ export default {
       const flag = dishId in this.dishRatings;
       const dish = this.menuItems.find(item => item.dish_id === dishId)
       dish.rating = rating
-      axios.post(`http://localhost:8080/dish/update?dish_id=${dishId}&rating=${rating}&flag=${!flag}&last_rating=${flag ? this.dishRatings[dishId] : 0.0}`)
+      axios.post(`http://localhost:8080/dish/updateRating?dish_id=${dishId}&rating=${rating}&flag=${!flag}&last_rating=${flag ? this.dishRatings[dishId] : 0.0}`)
           .then((res) => {
             if(res.data.code === 200) {
               console.log(res.data.msg)
@@ -195,6 +195,14 @@ export default {
       // ✅ 直接赋值即可，无需 this.$set
       this.dishBookings[id] = !currentlyBooked
 
+      axios.post(`http://localhost:8080/dish/updateBooking?dish_id=${id}&change=${currentlyBooked ? -1 : 1}`)
+          .then((res) => {
+            if(res.data.code === 200) {
+              console.log(res.data.msg)
+            }
+          })
+          .catch(console.error)
+
       if (currentlyBooked) {
         alert(`已取消 ${dish.dish_name} 的预订`)
       } else {
@@ -202,7 +210,7 @@ export default {
       }
     },
     getItemsByCategory(category) {
-      return this.menuItems.filter(item => item.category === category)
+      return this.menuItems.filter(item => item.category && item.category.includes(category))
     }
   }
 }
