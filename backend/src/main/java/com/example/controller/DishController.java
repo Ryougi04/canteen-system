@@ -5,7 +5,9 @@ import com.example.mapper.DishMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.Serializable;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -30,9 +32,9 @@ public class DishController {
         json.put("dish", dishMapper.selectById(dish_id));
         return json;
     }
-    @PostMapping("/update")
+    @PostMapping("/updateRating")
     @ResponseBody
-    public Map<String,Object> update(@RequestParam("dish_id") Integer dish_id, @RequestParam("rating") float rating, @RequestParam("flag") boolean flag, @RequestParam("last_rating") float last_rating){
+    public Map<String,Object> updateRating(@RequestParam("dish_id") Integer dish_id, @RequestParam("rating") float rating, @RequestParam("flag") boolean flag, @RequestParam("last_rating") float last_rating){
         Map<String,Object> json = new HashMap<>();
         Dish dish = dishMapper.selectById(dish_id);
         if(flag) {
@@ -79,6 +81,31 @@ public class DishController {
     public Map<String,Object> delete(@RequestParam("dish_id") Integer dish_id){
         Map<String,Object> json = new HashMap<>();
         dishMapper.deleteById(dish_id);
+        json.put("code", 200);
+        json.put("msg", "success");
+        return json;
+    }
+    @PutMapping("/updatePrice")
+    @ResponseBody
+    public Map<String,Object> updatePrice(@RequestBody List<Map<String,Object>> updatedPrice){
+        Map<String,Object> json = new HashMap<>();
+        updatedPrice.forEach(map -> {
+            Dish dish = dishMapper.selectById((Serializable) map.get("dish_id"));
+            Number price = (Number) map.get("price");
+            dish.setPrice(price.floatValue());
+            dishMapper.updateById(dish);
+        });
+        json.put("code", 200);
+        json.put("msg", "success");
+        return json;
+    }
+    @PostMapping("/updateBooking")
+    @ResponseBody
+    public Map<String,Object> updateBooking(@RequestParam("dish_id") Integer dish_id, @RequestParam("change") Integer change){
+        Map<String,Object> json = new HashMap<>();
+        Dish dish = dishMapper.selectById(dish_id);
+        dish.setBookings(dish.getBookings() + change);
+        dishMapper.updateById(dish);
         json.put("code", 200);
         json.put("msg", "success");
         return json;
