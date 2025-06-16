@@ -22,7 +22,7 @@
         </template>
       </DashboardCard>
 
-      <DashboardCard title="包间预约" :count="roomBookingCount" @click="goToReserve" style="cursor: pointer;">
+      <DashboardCard title="包间预约" :count="roomReservationCount" @click="goToReserve" style="cursor: pointer;">
         <template #icon>
           <svg width="30" height="30" fill="none" stroke="#4a90e2" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
             <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
@@ -31,29 +31,31 @@
         </template>
       </DashboardCard>
 
-      <!-- <DashboardCard title="菜品预订" :count="activeUserCount">
-        <template #icon>
-          <svg width="30" height="30" fill="none" stroke="#4a90e2" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
-            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-            <circle cx="12" cy="7" r="4"></circle>
-          </svg>
-        </template>
-      </DashboardCard> -->
+<!--      <DashboardCard title="菜品预订" :count="dishBookingCount">-->
+<!--        <template #icon>-->
+<!--          <svg width="30" height="30" fill="none" stroke="#4a90e2" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">-->
+<!--            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>-->
+<!--            <circle cx="12" cy="7" r="4"></circle>-->
+<!--          </svg>-->
+<!--        </template>-->
+<!--      </DashboardCard>-->
     </div>
   </div>
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import DashboardCard from '@/components/DashboardCard.vue'
+import axios from "axios";
 
 const router = useRouter()
 
-const todayMenuCount = ref(12)
-const dishCount = ref(150)
-const roomBookingCount = ref(21)
-const activeUserCount = ref(38)
+const overviewData = ref({})
+const todayMenuCount = ref()
+const dishCount = ref()
+const roomReservationCount = ref()
+const dishBookingCount = ref()
 
 const goToOverview = () => {
   router.push('/overview')
@@ -64,6 +66,22 @@ const goToMenu = () => {
 const goToReserve = () => {
   router.push('/reserve')
 }
+
+onMounted(async () => {
+  axios.get('http://localhost:8080/overview/getAll')
+      .then((res) => {
+        res.data.overviewData.forEach(item => {
+          overviewData.value[item.item] = item.num;
+        });
+        todayMenuCount.value = overviewData.value['menu']
+        dishCount.value = overviewData.value['dish']
+        roomReservationCount.value = overviewData.value['room_reservation']
+        dishBookingCount.value = overviewData.value['dish_booking']
+      })
+      .catch((err) => {
+        console.log(err)
+      })
+});
 </script>
 
 <style scoped>
@@ -83,7 +101,7 @@ const goToReserve = () => {
 
 .card-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
   gap: 20px;
   margin-bottom: 50px;
 }
