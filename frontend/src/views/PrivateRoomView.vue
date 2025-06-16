@@ -5,11 +5,11 @@
     <form @submit.prevent="submitReservation">
       <div class="form-group">
         <label>姓名：</label>
-        <input v-model="form.name" type="text" required />
+        <input v-model="form.username" type="text" disabled />
       </div>
       <div class="form-group">
         <label>电话：</label>
-        <input v-model="form.phone" type="tel" required />
+        <input v-model="form.phone" type="tel" disabled />
       </div>
       <div class="form-group">
         <label>预约时间：</label>
@@ -17,7 +17,7 @@
       </div>
       <div class="form-group">
         <label>包间类型：</label>
-        <select v-model="form.roomType" required>
+        <select v-model="form.type" required>
           <option value="small">小包间（1-4人）</option>
           <option value="medium">中包间（5-8人）</option>
           <option value="large">大包间（9-12人）</option>
@@ -37,26 +37,35 @@ export default {
   data() {
     return {
       form: {
-        name: '',
+        username: sessionStorage.getItem('username'),
         phone: '',
         date: '',
-        roomType: 'small'
+        type: 'small'
       },
       successMessage: ''
     };
   },
+  mounted() {
+    axios.get(`http://localhost:8080/user/get?username=${this.form.username}`)
+        .then((res) => {
+          if(res.data.code === 200) {
+            this.form.phone = res.data.user.phone;
+          }
+        })
+        .catch(console.error)
+  },
   methods: {
     // 新增的返回主页方法
     goToHome() {
-      this.$router.push({ name: 'home' })
+      this.$router.replace({ name: 'home' })
     },
     async submitReservation() {
-      axios.post(`http://localhost:8080/private-room/add?name=${this.form.name}&phone=${this.form.phone}&date=${this.form.date}&roomType=${this.form.roomType}`)
+      axios.post(`http://localhost:8080/private-room/add?username=${this.form.username}&phone=${this.form.phone}&date=${this.form.date}&type=${this.form.type}`)
           .then((res) => {
             if(res.data.code === 200) {
-              // ElMessage.success(res.data.msg);
               this.successMessage = '预约提交成功！我们将尽快与您联系。';
-              this.form = { name: '', phone: '', date: '', roomType: 'small' };
+              this.form.date = '';
+              this.form.type = 'small';
             }
           })
           .catch((err) => {
