@@ -12,7 +12,7 @@
     <div class="dish-list">
       <!-- 菜品卡片 -->
       <div
-          v-for="(dish, index) in dishes"
+          v-for="(dish,index) in dishes"
           :key="dish.dish_id"
           class="dish-card"
           @click="goToManage(dish.dish_id)"
@@ -20,6 +20,7 @@
         <img :src='`src/assets/${dish.image}.jpg`' alt="dish image" class="dish-image" />
         <div class="dish-info">
           <h2 class="dish-name">{{ dish.dish_name }}</h2>
+          <div class="dish-wish">想吃人数：{{ dish.bookings }}</div>
         </div>
       </div>
 
@@ -48,6 +49,7 @@ export default {
           image: 'hongshaorou',
           rating: 4.8,
           rating_num: 120,
+          bookings: 80,
         },
         {
           dish_id: 2,
@@ -55,6 +57,7 @@ export default {
           image: 'yuxiangrousi',
           rating: 4.7,
           rating_num: 110,
+          bookings: 70,
         },
         {
           dish_id: 3,
@@ -62,6 +65,7 @@ export default {
           image: 'yuxiangrousi',
           rating: 4.6,
           rating_num: 98,
+          bookings: 90,
         },
         {
           dish_id: 4,
@@ -69,6 +73,7 @@ export default {
           image: 'suancaiyu',
           rating: 4.3,
           rating_num: 93,
+          bookings: 85,
         },
         {
           dish_id: 5,
@@ -76,6 +81,7 @@ export default {
           image: 'suancaiyu',
           rating: 4.9,
           rating_num: 100,
+          bookings:125,
         },
       ],
     };
@@ -187,7 +193,16 @@ export default {
 .dish-info {
   margin-top: 10px;
 }
-
+.dish-wish {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  font-size: 13px;
+  color: #888;
+  background-color: rgba(255, 255, 255, 0.7);
+  padding: 2px 6px;
+  border-radius: 8px;
+}
 .dish-name {
   font-size: 18px;
   font-weight: bold;

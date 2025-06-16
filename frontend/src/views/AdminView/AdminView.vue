@@ -31,14 +31,14 @@
         </template>
       </DashboardCard>
 
-      <DashboardCard title="菜品预订" :count="activeUserCount">
+      <!-- <DashboardCard title="菜品预订" :count="activeUserCount">
         <template #icon>
           <svg width="30" height="30" fill="none" stroke="#4a90e2" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
             <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
             <circle cx="12" cy="7" r="4"></circle>
           </svg>
         </template>
-      </DashboardCard>
+      </DashboardCard> -->
     </div>
   </div>
 </template>
@@ -83,7 +83,7 @@ const goToReserve = () => {
 
 .card-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
   gap: 20px;
   margin-bottom: 50px;
 }
