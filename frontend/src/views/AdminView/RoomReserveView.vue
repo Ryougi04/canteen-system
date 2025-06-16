@@ -22,10 +22,10 @@
         </thead>
         <tbody>
         <tr v-for="(room, index) in reservations" :key="index">
-          <td>{{ room.name }}</td>
+          <td>{{ room.room_name }}</td>
           <td>{{ room.type }}</td>
-          <td>{{ room.time }}</td>
-          <td>{{ room.user }}</td>
+          <td>{{ room.date }}</td>
+          <td>{{ room.username }}</td>
           <td>{{ room.phone }}</td>
         </tr>
         </tbody>
@@ -36,6 +36,7 @@
 
 <script>
 import axios from "axios";
+import dayjs from 'dayjs';
 
 export default {
   name: 'RoomReserve',
@@ -43,34 +44,38 @@ export default {
     return {
       reservations: [
         {
-          name: '贵宾包间A',
+          room_name: '贵宾包间A',
           type: '大包间',
-          time: '2025-06-14 18:00',
-          user: '张三',
+          date: '2025-06-14 18:00',
+          username: '张三',
           phone: '13812345678',
         },
         {
-          name: '家庭包间B',
+          room_name: '家庭包间B',
           type: '中包间',
-          time: '2025-06-14 19:00',
-          user: '李四',
+          date: '2025-06-14 19:00',
+          username: '李四',
           phone: '13987654321',
         },
         {
-          name: '商务包间C',
+          room_name: '商务包间C',
           type: '小包间',
-          time: '2025-06-14 20:00',
-          user: '王五',
+          date: '2025-06-14 20:00',
+          username: '王五',
           phone: '13711223344',
         },
       ],
     };
   },
   mounted() {
-    axios.get("http://localhost:8080/reservation/privateRoomList")
+    axios.get("http://localhost:8080/private-room/getAll")
         .then((res) => {
           if (res.data.code === 200) {
-            this.reservations = res.data.data;
+            this.reservations = res.data.reservation;
+            this.reservations.forEach(room => {
+              room.type = room.type === 'small' ? '小包间' : room.type === 'medium' ? '中包间' : '大包间';
+              room.date = dayjs(room.date).format('YYYY-MM-DD HH:mm');
+            });
           }
         })
         .catch(() => {
@@ -80,7 +85,7 @@ export default {
   },
   methods: {
     goToHome() {
-      this.$router.push({ name: 'admin' });
+      this.$router.replace({ name: 'admin' });
     }
   },
 };
