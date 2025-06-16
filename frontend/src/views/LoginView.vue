@@ -32,7 +32,7 @@ const handleLogin = () => {
     sessionStorage.setItem('username', username.value);
     router.replace('/home')
   } else {
-    alert('用户名或密码错误')
+    // alert('用户名或密码错误')
   }
   axios.get(`http://localhost:8080/user/get?username=${username.value}`)
       .then((res) => {
