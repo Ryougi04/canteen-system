@@ -18,7 +18,7 @@ public class CanteenController {
     public Map<String,Object> getAll(){
         Map<String,Object> json = new HashMap<>();
         json.put("code", 200);
-        json.put("post", canteenMapper.selectList(null));
+        json.put("canteen", canteenMapper.selectList(null));
         return json;
     }
 }
