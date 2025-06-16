@@ -2,7 +2,7 @@
   <div class="review-container">
     <!-- 返回按钮 -->
     <div class="top-bar">
-      <button class="back-button" @click="goToRanking">返回总览</button>
+      <button class="back-button" @click="goToOverview">返回总览</button>
     </div>
 
     <!-- 标题 -->
@@ -137,6 +137,9 @@ export default {
           })
           .then(res => {
             if (res.data.code === 200) {
+              if (this.dishID === '0') {
+                axios.post('http://localhost:8080/overview/update?item=dish&value=1');
+              }
               alert("菜品信息已更新！");
             }
           })
@@ -146,8 +149,9 @@ export default {
       this.deletedComments.forEach(comment => {
         axios.post(`http://localhost:8080/comment/delete?comment_id=${comment.comment_id}`).catch(console.error);
       });
-
       this.deletedComments = [];
+
+      // this.$router.replace({ name: 'overview' });
     },
     deleteDish() {
       if (!confirm("确定要删除该菜品吗？此操作无法撤销！")) {
@@ -158,6 +162,7 @@ export default {
           .then(res => {
             if (res.data.code === 200) {
               alert("菜品已删除！");
+              axios.post('http://localhost:8080/overview/update?item=dish&value=-1');
               this.$router.replace({ name: 'overview' });
             } else {
               alert("删除失败：" + res.data.msg);
@@ -168,7 +173,7 @@ export default {
             alert("删除过程发生错误！");
           });
     },
-    goToRanking() {
+    goToOverview() {
       this.$router.replace({ name: 'overview' });
     }
   }
