@@ -13,7 +13,6 @@
       <table class="reservation-table">
         <thead>
         <tr>
-          <th>包间名称</th>
           <th>包间类型</th>
           <th>预约时间</th>
           <th>预约姓名</th>
@@ -22,7 +21,6 @@
         </thead>
         <tbody>
         <tr v-for="(room, index) in reservations" :key="index">
-          <td>{{ room.room_name }}</td>
           <td>{{ room.type }}</td>
           <td>{{ room.date }}</td>
           <td>{{ room.username }}</td>
@@ -44,21 +42,18 @@ export default {
     return {
       reservations: [
         {
-          room_name: '贵宾包间A',
           type: '大包间',
           date: '2025-06-14 18:00',
           username: '张三',
           phone: '13812345678',
         },
         {
-          room_name: '家庭包间B',
           type: '中包间',
           date: '2025-06-14 19:00',
           username: '李四',
           phone: '13987654321',
         },
         {
-          room_name: '商务包间C',
           type: '小包间',
           date: '2025-06-14 20:00',
           username: '王五',
@@ -72,9 +67,9 @@ export default {
         .then((res) => {
           if (res.data.code === 200) {
             this.reservations = res.data.reservation;
-            this.reservations.forEach(room => {
-              room.type = room.type === 'small' ? '小包间' : room.type === 'medium' ? '中包间' : '大包间';
-              room.date = dayjs(room.date).format('YYYY-MM-DD HH:mm');
+            this.reservations.forEach(item => {
+              item.type = item.type === 'small' ? '小包间' : item.type === 'medium' ? '中包间' : '大包间';
+              item.date = dayjs(item.date).format('YYYY-MM-DD HH:mm');
             });
           }
         })
