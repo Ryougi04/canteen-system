@@ -33,4 +33,5 @@ public class Dish {
   public float rating;
   public int rating_num;  // 评价人数
   String image;
+  String available;       // 是否供应
 }
