@@ -22,9 +22,8 @@ public class CommentController {
         Map<String,Object> json = new HashMap<>();
         QueryWrapper<Comment> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("dish_id", dish_id);
-        List<Comment> comments = commentMapper.selectList(queryWrapper);
         json.put("code", 200);
-        json.put("comment", comments);
+        json.put("comment", commentMapper.selectList(queryWrapper));
         return json;
     }
     @PostMapping("/add")
