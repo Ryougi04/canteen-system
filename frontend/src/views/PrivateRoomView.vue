@@ -13,7 +13,24 @@
       </div>
       <div class="form-group">
         <label>预约时间：</label>
-        <input v-model="form.date" type="datetime-local" required />
+        <el-form :model="form" label-width="100px">
+          <!-- 预约时间选择 -->
+          <div class="form-group">
+            <el-date-picker
+                v-model="form.date"
+                type="datetime"
+                :disabled-date="disabledDate"
+                :disabled-hours="disabledHours"
+                :disabled-minutes="disabledMinutes"
+                :format="'YYYY-MM-DD HH:mm'"
+                :value-format="'YYYY-MM-DDTHH:mm:00'"
+                placeholder="选择预约时间"
+                :clearable="false"
+                style="width: 100%;height: 45px;"
+            />
+            <small style="color: gray;">仅限 08:00 到 21:00 的整点</small>
+          </div>
+        </el-form>
       </div>
       <div class="form-group">
         <label>包间类型：</label>
@@ -72,6 +89,22 @@ export default {
             console.log(err);
             alert(err.response?.data?.message || '提交失败，请稍后重试');
           });
+    },
+    disabledDate(time) {
+      // 不允许选择今天之前的日期
+      return time.getTime() < new Date().setHours(0, 0, 0, 0);
+    },
+    disabledHours() {
+      // 允许的小时：8 到 21
+      const allowed = [];
+      for (let i = 8; i <= 21; i++) {
+        allowed.push(i);
+      }
+      return Array.from({ length: 24 }, (_, i) => i).filter(h => !allowed.includes(h));
+    },
+    disabledMinutes() {
+      // 所有小时只能选00分（整点）
+      return Array.from({ length: 60 }, (_, i) => i).filter(m => m !== 0);
     }
   }
 }
