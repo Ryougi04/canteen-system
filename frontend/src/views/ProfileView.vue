@@ -98,6 +98,50 @@
         </form>
       </div>
     </div>
+
+    <!-- 查看预定对话框 -->
+    <div class="modal" v-if="showReservationModal">
+      <div class="modal-content">
+        <h3>我的预定</h3>
+
+        <!-- 添加下拉框 -->
+        <div class="form-group">
+          <label for="type">预订类型：</label>
+          <select v-model="reservationType" id="type">
+            <option value="room">包间预订</option>
+            <option value="dish">菜品预订</option>
+          </select>
+        </div>
+
+        <!-- 包间预订 -->
+        <div v-if="reservationType === 'room'">
+          <div v-if="reservations.length">
+            <ul class="reservation-list">
+              <li v-for="(item, index) in reservations" :key="index">
+                <strong>{{ item.date }}</strong> - {{ item.time }} - {{ item.room }}
+              </li>
+            </ul>
+          </div>
+          <div v-else>暂无包间预定记录。</div>
+        </div>
+
+        <!-- 菜品预订 -->
+        <div v-else-if="reservationType === 'dish'">
+          <div v-if="dishReservations.length">
+            <ul class="reservation-list">
+              <li v-for="(item, index) in dishReservations" :key="index">
+                <strong>{{ item.date }}</strong> - {{ item.meal }} - {{ item.dishName }} × {{ item.quantity }}（{{ item.canteen }} - {{ item.status }}）
+              </li>
+            </ul>
+          </div>
+          <div v-else>暂无菜品预定记录。</div>
+        </div>
+
+        <div class="form-actions">
+          <button class="cancel-btn" @click="showReservationModal = false">关闭</button>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -108,6 +152,56 @@ export default {
   name: 'ProfileView',
   data() {
     return {
+      showReservationModal: false,
+      reservationType: 'room', // 'room' or 'dish'
+      reservations: [
+        {
+          date: '2025-06-15',
+          time: '11:30 - 13:00',
+          room: '小包间'
+        },
+        {
+          date: '2025-06-16',
+          time: '18:00 - 20:00',
+          room: '中包间'
+        },
+        {
+          date: '2025-06-17',
+          time: '12:00 - 14:00',
+          room: '大包间'
+        },
+        {
+          date: '2025-06-20',
+          time: '17:30 - 19:00',
+          room: '小包间'
+        }
+      ],
+      dishReservations: [
+        {
+          date: '2025-06-16',
+          meal: '午餐',
+          dishName: '红烧排骨',
+          quantity: 2,
+          canteen: '一食堂',
+          status: '已预订'
+        },
+        {
+          date: '2025-06-17',
+          meal: '晚餐',
+          dishName: '鱼香肉丝',
+          quantity: 1,
+          canteen: '二食堂',
+          status: '已完成'
+        },
+        {
+          date: '2025-06-18',
+          meal: '早餐',
+          dishName: '豆浆油条',
+          quantity: 3,
+          canteen: '一食堂',
+          status: '已取消'
+        }
+      ],
       username: sessionStorage.getItem('username'),
       defaultAvatar: 'public/images/image.jpg',
       user: {
@@ -150,7 +244,20 @@ export default {
       this.showPasswordModal = true
     },
     viewReservations() {
-      this.$router.push({ name: 'reservations' })
+      axios.get(`http://localhost:8080/reservation/list?username=${this.username}`)
+          .then((res) => {
+            if (res.data.code === 200) {
+              this.reservations = res.data.reservations || [];
+            } else {
+              this.reservations = [];
+              alert('获取预定信息失败！');
+            }
+            this.showReservationModal = true;
+          })
+          .catch(() => {
+            alert('无法连接服务器。');
+            this.showReservationModal = true;
+          });
     },
     logout() {
       // 实现退出登录逻辑
@@ -345,13 +452,35 @@ export default {
   border-radius: 12px;
   padding: 25px;
   width: 100%;
-  max-width: 400px;
+  max-width: 600px;
 }
 
 .modal-content h3 {
   margin-top: 0;
   text-align: center;
   color: #333;
+}
+
+.reservation-list {
+  max-height: 300px;
+  overflow-y: auto;
+  padding-right: 5px;
+  margin-top: 10px;
+  border-top: 1px solid #eee;
+}
+
+.reservation-list li {
+  padding: 10px 0;
+  border-bottom: 1px solid #f0f0f0;
+  color: #333;
+}
+
+select {
+  padding: 6px 10px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .form-group {
