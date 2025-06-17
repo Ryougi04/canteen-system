@@ -60,10 +60,10 @@
                 >★</span>
                 <button
                     class="book-button"
-                    :class="{ booked: isBooked(item.dish_id) }"
-                    @click="toggleBooking(item)"
+                    :class="{ booked: isBooked(item.dish_id, category) }"
+                    @click="toggleBooking(item, category)"
                 >
-                  {{ isBooked(item.dish_id) ? '取消预订' : '预订' }}
+                  {{ isBooked(item.dish_id, category) ? '取消预订' : '预订' }}
                 </button>
               </div>
             </li>
@@ -250,14 +250,19 @@ export default {
           .catch(console.error)
       this.dishRatings[dishId] = rating
     },
-    isBooked(dishId) {
-      return this.dishBookings[dishId] === true
+    isBooked(dishId, category) {
+      return this.dishBookings[dishId]?.[category] === true
     },
-    toggleBooking(dish) {
+    toggleBooking(dish, category) {
       const id = dish.dish_id
-      const currentlyBooked = this.dishBookings[id] === true
+      const currentlyBooked = this.dishBookings[id]?.[category] === true || false
 
-      this.dishBookings[id] = !currentlyBooked
+      // 如果 dishBookings[id] 不存在，初始化为一个空对象
+      if (!this.dishBookings[id]) {
+        this.dishBookings[id] = {};
+      }
+      // 更新当前分类的预订状态
+      this.dishBookings[id][category] = !currentlyBooked;
 
       axios.post(`http://localhost:8080/dish/updateBooking?dish_id=${id}&change=${currentlyBooked ? -1 : 1}`)
           .then((res) => {
@@ -268,9 +273,21 @@ export default {
           .catch(console.error)
 
       if (currentlyBooked) {
-        alert(`已取消 ${dish.dish_name} 的预订`)
+        axios.post(`http://localhost:8080/dish/deleteBooking?username=${sessionStorage.getItem("username")}&dish_id=${id}&canteen_id=${this.selectedCanteen}&date=${this.selectedDate}`)
+            .then((res) => {
+              if(res.data.code === 200) {
+                alert(`已取消 ${dish.dish_name} 的预订`)
+              }
+            })
+            .catch(console.error)
       } else {
-        alert(`你已预订 ${dish.dish_name}`)
+        axios.post(`http://localhost:8080/dish/addBooking?username=${sessionStorage.getItem("username")}&dish_id=${id}&canteen_id=${this.selectedCanteen}&date=${this.selectedDate}&category=${category}`)
+            .then((res) => {
+              if(res.data.code === 200) {
+                alert(`你已预订 ${dish.dish_name}`)
+              }
+            })
+            .catch(console.error)
       }
     },
     getItemsByCategory(category) {
