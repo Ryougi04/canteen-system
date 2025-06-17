@@ -6,12 +6,14 @@ import com.example.entity.DishBooking;
 import com.example.mapper.DishBookingMapper;
 import com.example.mapper.DishMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Date;
 
 @RestController
 @RequestMapping("/dish")
@@ -73,7 +75,7 @@ public class DishController {
         Map<String,Object> json = new HashMap<>();
         Dish dish = dishMapper.selectById(dish_id);
         dish.setDish_name(dish_name);
-        dish.setDescription(description);
+        dish.setDescription(description.replace("描述", "\n描述"));
         dishMapper.updateById(dish);
         json.put("code", 200);
         json.put("msg", "success");
@@ -123,6 +125,35 @@ public class DishController {
         queryWrapper.eq("username", username);
         json.put("code", 200);
         json.put("booking", dishBookingMapper.selectList(queryWrapper));
+        return json;
+    }
+    @PostMapping("/addBooking")
+    @ResponseBody
+    public Map<String,Object> addBooking(@RequestParam("username") String username, @RequestParam("dish_id") int dish_id, @RequestParam("canteen_id") String canteen_id, @RequestParam("date") @DateTimeFormat(pattern = "yyyy-MM-dd") Date date, @RequestParam("category") String category){
+        Map<String,Object> json = new HashMap<>();
+        DishBooking dishBooking = new DishBooking();
+        dishBooking.setUsername(username);
+        dishBooking.setDish_id(dish_id);
+        dishBooking.setCanteen_id(canteen_id);
+        dishBooking.setDate(date);
+        dishBooking.setCategory(category);
+        dishBookingMapper.insert(dishBooking);
+        json.put("code", 200);
+        json.put("msg", "success");
+        return json;
+    }
+    @PostMapping("/deleteBooking")
+    @ResponseBody
+    public Map<String,Object> deleteBooking(@RequestParam("username") String username, @RequestParam("dish_id") int dish_id, @RequestParam("canteen_id") String canteen_id, @RequestParam("date") @DateTimeFormat(pattern = "yyyy-MM-dd") Date date){
+        Map<String,Object> json = new HashMap<>();
+        QueryWrapper<DishBooking> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("username", username);
+        queryWrapper.eq("dish_id", dish_id);
+        queryWrapper.eq("canteen_id", canteen_id);
+        queryWrapper.eq("date", date);
+        dishBookingMapper.delete(queryWrapper);
+        json.put("code", 200);
+        json.put("msg", "success");
         return json;
     }
 }
