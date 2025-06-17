@@ -171,18 +171,6 @@ export default {
   transform: translateY(-5px);
 }
 
-.rank-number {
-  position: absolute;
-  top: 10px;
-  left: 10px;
-  background-color: #4a90e2;
-  color: white;
-  padding: 2px 8px;
-  border-radius: 8px;
-  font-weight: bold;
-  font-size: 14px;
-}
-
 .dish-image {
   width: 100%;
   height: 150px;
@@ -208,11 +196,5 @@ export default {
   font-weight: bold;
   color: #333;
   margin: 5px 0;
-}
-
-.dish-rating,
-.dish-likes {
-  font-size: 14px;
-  color: #666;
 }
 </style>
