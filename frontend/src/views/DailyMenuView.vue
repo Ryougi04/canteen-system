@@ -98,43 +98,101 @@ export default {
       ],
       floors: [1, 2, 3],
       dishes: [
-        // // 早餐
-        // { dish_id: 'b1', dish_name: '豆浆油条', category: '早餐', price: 4.5, canteen_id: '1', floor: 1 },
-        // { dish_id: 'b2', dish_name: '鸡蛋灌饼', category: '早餐', price: 5.0, canteen_id: '1', floor: 1 },
-        // // 午餐
-        // { dish_id: 'l1', dish_name: '宫保鸡丁', category: '午餐', price: 12.0, canteen_id: '1', floor: 1 },
-        // { dish_id: 'l2', dish_name: '红烧茄子', category: '午餐', price: 9.0, canteen_id: '1', floor: 1 },
-        // // 晚餐
-        // { dish_id: 'd1', dish_name: '水煮鱼', category: '晚餐', price: 18.0, canteen_id: '1', floor: 1 },
-        // { dish_id: 'd2', dish_name: '西红柿炒鸡蛋', category: '晚餐', price: 10.0, canteen_id: '1', floor: 1 },
-        // { dish_id: 'd1', dish_name: '水煮鱼', category: '晚餐', price: 18.0, canteen_id: '1', floor: 1 },
-        // { dish_id: 'd2', dish_name: '西红柿炒鸡蛋', category: '晚餐', price: 10.0, canteen_id: '1', floor: 1 },
-        // // 夜宵
-        // { dish_id: 'n1', dish_name: '酸辣粉', category: '夜宵', price: 7.5, canteen_id: '1', floor: 1 },
-        // { dish_id: 'n2', dish_name: '鸡肉卷', category: '夜宵', price: 8.0, canteen_id: '1', floor: 1 },
-        // { dish_id: 'l1', dish_name: '宫保鸡丁', category: '午餐', price: 12.0, canteen_id: '2', floor: 1 },
-        // { dish_id: 'l2', dish_name: '红烧茄子', category: '午餐', price: 9.0, canteen_id: '2', floor: 1 },
-        // // 晚餐
-        // { dish_id: 'd1', dish_name: '水煮鱼', category: '晚餐', price: 18.0, canteen_id: '3', floor: 1 },
-        // { dish_id: 'd2', dish_name: '西红柿炒鸡蛋', category: '晚餐', price: 10.0, canteen_id: '3', floor: 1 },
-        // // 夜宵
-        // { dish_id: 'n1', dish_name: '酸辣粉', category: '夜宵', price: 7.5, canteen_id: '3', floor: 1 },
-        // { dish_id: 'n2', dish_name: '鸡肉卷', category: '夜宵', price: 8.0, canteen_id: '3', floor: 1 }
+        {
+          dish_id: 1,
+          dish_name: '豆浆油条',
+          price: 5.0,
+          category: ['早餐', '午餐'],
+          canteen_id: ['1', '2'],
+          floor: [1, 2],
+          rating: 4.2,
+          available_flag: '11' // 两天都供应
+        },
+        {
+          dish_id: 2,
+          dish_name: '皮蛋瘦肉粥',
+          price: 4.5,
+          category: ['早餐'],
+          canteen_id: ['2'],
+          floor: [2],
+          rating: 4.0,
+          available_flag: '10' // 只在第一天供应
+        },
+        {
+          dish_id: 3,
+          dish_name: '宫保鸡丁',
+          price: 12.0,
+          category: ['午餐'],
+          canteen_id: ['1'],
+          floor: [2],
+          rating: 4.5,
+          available_flag: '01' // 只在第二天供应
+        },
+        {
+          dish_id: 4,
+          dish_name: '红烧排骨',
+          price: 15.0,
+          category: ['午餐'],
+          canteen_id: ['3'],
+          floor: [1],
+          rating: 4.3,
+          available_flag: '11'
+        },
+        {
+          dish_id: 5,
+          dish_name: '麻辣香锅',
+          price: 18.0,
+          category: ['晚餐'],
+          canteen_id: ['2'],
+          floor: [3],
+          rating: 4.7,
+          available_flag: '10'
+        },
+        {
+          dish_id: 6,
+          dish_name: '鱼香肉丝',
+          price: 11.0,
+          category: ['晚餐'],
+          canteen_id: ['1'],
+          floor: [3],
+          rating: 4.4,
+          available_flag: '01'
+        },
+        {
+          dish_id: 7,
+          dish_name: '酸辣粉',
+          price: 7.5,
+          category: ['夜宵'],
+          canteen_id: ['3'],
+          floor: [2],
+          rating: 4.1,
+          available_flag: '11'
+        },
+        {
+          dish_id: 8,
+          dish_name: '炒米粉',
+          price: 6.0,
+          category: ['夜宵'],
+          canteen_id: ['2'],
+          floor: [1],
+          rating: 4.0,
+          available_flag: '00' // 两天都不供应
+        }
       ],
       menuItems: [],
       menuCategories: ['早餐', '午餐', '晚餐', '夜宵']
     }
   },
   mounted() {
-    axios.get("http://localhost:8080/dish/getAll")
-        .then((res) => {
-          if(res.data.code === 200) {
-            this.dishes = res.data.dish
-            // sessionStorage.setItem("dishNum", this.dishes.length)
-            this.fetchMenu()
-          }
-        })
-        .catch(console.error)
+    // axios.get("http://localhost:8080/dish/getAll")
+    //     .then((res) => {
+    //       if(res.data.code === 200) {
+    //         this.dishes = res.data.dish
+    //         // sessionStorage.setItem("dishNum", this.dishes.length)
+    //         this.fetchMenu()
+    //       }
+    //     })
+    //     .catch(console.error)
   },
   computed: {
     selectedCanteenName() {
@@ -164,12 +222,20 @@ export default {
       return dates
     },
     fetchMenu() {
-      this.menuItems = (this.dishes || []).filter(
-          item => (item.canteen_id && item.canteen_id.includes(this.selectedCanteen)) && (item.floor && item.floor.includes(this.selectedFloor))
+      const dateIndex = this.availableDates.findIndex(date => date === this.selectedDate)
+      if (dateIndex === -1) return
+
+      const flagIndex = dateIndex  // 0 or 1
+
+      this.menuItems = (this.dishes || []).filter(item =>
+          item.canteen_id.includes(this.selectedCanteen) &&
+          item.floor.includes(this.selectedFloor) &&
+          item.available_flag &&
+          item.available_flag[flagIndex] === '1'
       )
 
       this.menuItems.forEach(item => {
-        item.rating = this.dishRatings[item.id] || 0
+        item.rating = this.dishRatings[item.dish_id] || 0
       })
     },
     rateDish(dishId, rating) {
@@ -192,7 +258,6 @@ export default {
       const id = dish.dish_id
       const currentlyBooked = this.dishBookings[id] === true
 
-      // ✅ 直接赋值即可，无需 this.$set
       this.dishBookings[id] = !currentlyBooked
 
       axios.post(`http://localhost:8080/dish/updateBooking?dish_id=${id}&change=${currentlyBooked ? -1 : 1}`)
