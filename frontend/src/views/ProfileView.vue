@@ -108,17 +108,17 @@
         <div class="form-group">
           <label for="type">预订类型：</label>
           <select v-model="reservationType" id="type">
-            <option value="room">包间预订</option>
+            <option value="room">包间预约</option>
             <option value="dish">菜品预订</option>
           </select>
         </div>
 
         <!-- 包间预订 -->
         <div v-if="reservationType === 'room'">
-          <div v-if="reservations.length">
+          <div v-if="roomReservations.length">
             <ul class="reservation-list">
-              <li v-for="(item, index) in reservations" :key="index">
-                <strong>{{ item.date }}</strong> - {{ item.time }} - {{ item.room }}
+              <li v-for="(item, index) in roomReservations" :key="index">
+                <strong>{{ item.date }}</strong> - {{ item.type }}
               </li>
             </ul>
           </div>
@@ -127,10 +127,10 @@
 
         <!-- 菜品预订 -->
         <div v-else-if="reservationType === 'dish'">
-          <div v-if="dishReservations.length">
+          <div v-if="dishBookings.length">
             <ul class="reservation-list">
-              <li v-for="(item, index) in dishReservations" :key="index">
-                <strong>{{ item.date }}</strong> - {{ item.meal }} - {{ item.dishName }} × {{ item.quantity }}（{{ item.canteen }} - {{ item.status }}）
+              <li v-for="(item, index) in dishBookings" :key="index">
+                <strong>{{ item.date }}</strong> - {{ item.category }} - {{ item.dish }}（{{ item.canteen }}）
               </li>
             </ul>
           </div>
@@ -147,61 +147,12 @@
 
 <script>
 import axios from "axios";
+import dayjs from "dayjs";
 
 export default {
   name: 'ProfileView',
   data() {
     return {
-      showReservationModal: false,
-      reservationType: 'room', // 'room' or 'dish'
-      reservations: [
-        {
-          date: '2025-06-15',
-          time: '11:30 - 13:00',
-          room: '小包间'
-        },
-        {
-          date: '2025-06-16',
-          time: '18:00 - 20:00',
-          room: '中包间'
-        },
-        {
-          date: '2025-06-17',
-          time: '12:00 - 14:00',
-          room: '大包间'
-        },
-        {
-          date: '2025-06-20',
-          time: '17:30 - 19:00',
-          room: '小包间'
-        }
-      ],
-      dishReservations: [
-        {
-          date: '2025-06-16',
-          meal: '午餐',
-          dishName: '红烧排骨',
-          quantity: 2,
-          canteen: '一食堂',
-          status: '已预订'
-        },
-        {
-          date: '2025-06-17',
-          meal: '晚餐',
-          dishName: '鱼香肉丝',
-          quantity: 1,
-          canteen: '二食堂',
-          status: '已完成'
-        },
-        {
-          date: '2025-06-18',
-          meal: '早餐',
-          dishName: '豆浆油条',
-          quantity: 3,
-          canteen: '一食堂',
-          status: '已取消'
-        }
-      ],
       username: sessionStorage.getItem('username'),
       defaultAvatar: 'public/images/image.jpg',
       user: {
@@ -216,14 +167,59 @@ export default {
         currentPassword: '',
         newPassword: '',
         confirmPassword: ''
-      }
+      },
+      canteens: [
+        { id: '1', name: '学苑楼食堂' },
+        { id: '2', name: '学士楼食堂' },
+        { id: '3', name: '学子楼食堂' }
+      ],
+      showReservationModal: false,
+      reservationType: 'room', // 'room' or 'dish'
+      roomReservations: [
+        {
+          date: '2025-06-15',
+          time: '11:30 - 13:00',
+          type: '小包间'
+        },
+        {
+          date: '2025-06-16',
+          time: '18:00 - 20:00',
+          type: '中包间'
+        },
+        {
+          date: '2025-06-17',
+          time: '12:00 - 14:00',
+          type: '大包间'
+        },
+        {
+          date: '2025-06-20',
+          time: '17:30 - 19:00',
+          type: '小包间'
+        }
+      ],
+      dishBookings: [
+        {
+          date: '2025-06-16',
+          category: '午餐',
+          dish: '红烧排骨',
+          canteen: '一食堂',
+        },
+        {
+          date: '2025-06-17',
+          category: '晚餐',
+          dish: '鱼香肉丝',
+          canteen_id: '二食堂',
+        },
+        {
+          date: '2025-06-18',
+          category: '早餐',
+          dish: '豆浆油条',
+          canteen: '一食堂',
+        }
+      ]
     }
   },
   created() {
-    // 这里可以从Vuex或API获取用户信息
-    // this.fetchUserInfo()
-  },
-  mounted() {
     axios.get(`http://localhost:8080/user/get?username=${this.username}`)
         .then((res) => {
           if(res.data.code === 200) {
@@ -244,20 +240,38 @@ export default {
       this.showPasswordModal = true
     },
     viewReservations() {
-      axios.get(`http://localhost:8080/reservation/list?username=${this.username}`)
+      // 获取包间预约记录
+      axios.get(`http://localhost:8080/private-room/getByUser?username=${this.username}`)
           .then((res) => {
-            if (res.data.code === 200) {
-              this.reservations = res.data.reservations || [];
-            } else {
-              this.reservations = [];
-              alert('获取预定信息失败！');
+            if(res.data.code === 200) {
+              this.roomReservations = res.data.reservation;
+              this.roomReservations.forEach(item => {
+                item.date = dayjs(item.date).format('YYYY-MM-DD HH:mm');
+                item.type = item.type === 'small' ? '小包间' : item.type === 'medium' ? '中包间' : '大包间';
+              })
             }
-            this.showReservationModal = true;
           })
-          .catch(() => {
-            alert('无法连接服务器。');
-            this.showReservationModal = true;
-          });
+          .catch(console.error)
+      // 获取菜品预订记录
+      axios.get(`http://localhost:8080/dish/getBooking?username=${this.username}`)
+          .then((res) => {
+            if(res.data.code === 200) {
+              this.dishBookings = res.data.booking;
+              this.dishBookings.forEach(item => {
+                item.date = dayjs(item.date).format('YYYY-MM-DD');
+                item.canteen = this.canteens.find(canteen => canteen.id === item.canteen_id).name;
+                axios.get(`http://localhost:8080/dish/getById?dish_id=${item.dish_id}`)
+                    .then((res) => {
+                      if(res.data.code === 200) {
+                        item.dish = res.data.dish.dish_name;
+                      }
+                    })
+                    .catch(console.error)
+              })
+            }
+          })
+          .catch(console.error)
+      this.showReservationModal = true;
     },
     logout() {
       // 实现退出登录逻辑
