@@ -1,5 +1,6 @@
 package com.example.controller;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.example.entity.PrivateRoom;
 import com.example.mapper.PrivateRoomMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +17,7 @@ import java.util.Map;
 public class PrivateRoomController {
   @Autowired
   private PrivateRoomMapper privateRoomMapper;
-  @RequestMapping("/getAll")
+  @GetMapping("/getAll")
   @ResponseBody
   public Map<String,Object> getAll(){
     Map<String,Object> json = new HashMap<>();
@@ -36,6 +37,16 @@ public class PrivateRoomController {
     privateRoomMapper.insert(privateRoom);
     json.put("code", 200);
     json.put("msg", "success");
+    return json;
+  }
+  @GetMapping("/getByUser")
+  @ResponseBody
+  public Map<String,Object> getByUser(@RequestParam("username") String username){
+    Map<String,Object> json = new HashMap<>();
+    QueryWrapper<PrivateRoom> queryWrapper = new QueryWrapper<>();
+    queryWrapper.eq("username", username);
+    json.put("code", 200);
+    json.put("reservation", privateRoomMapper.selectList(queryWrapper));
     return json;
   }
 }

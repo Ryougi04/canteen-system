@@ -1,6 +1,9 @@
 package com.example.controller;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.example.entity.Dish;
+import com.example.entity.DishBooking;
+import com.example.mapper.DishBookingMapper;
 import com.example.mapper.DishMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -108,6 +111,18 @@ public class DishController {
         dishMapper.updateById(dish);
         json.put("code", 200);
         json.put("msg", "success");
+        return json;
+    }
+    @Autowired
+    private DishBookingMapper dishBookingMapper;
+    @GetMapping("/getBooking")
+    @ResponseBody
+    public Map<String,Object> getBooking(@RequestParam("username") String username){
+        Map<String,Object> json = new HashMap<>();
+        QueryWrapper<DishBooking> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("username", username);
+        json.put("code", 200);
+        json.put("booking", dishBookingMapper.selectList(queryWrapper));
         return json;
     }
 }
