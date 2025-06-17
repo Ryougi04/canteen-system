@@ -20,7 +20,7 @@
         <img :src='`src/assets/${dish.image}.jpg`' alt="dish image" class="dish-image" />
         <div class="dish-info">
           <h2 class="dish-name">{{ dish.dish_name }}</h2>
-          <div class="dish-wish">想吃人数：{{ dish.bookings }}</div>
+          <div class="dish-wish">预订人数：{{ dish.bookings }}</div>
         </div>
       </div>
 
