@@ -118,7 +118,7 @@ export default {
           canteen_id: ['1', '2'],
           floor: [1, 2],
           rating: 4.2,
-          available_flag: '11' // 两天都供应
+          available: '11' // 两天都供应
         },
         {
           dish_id: 2,
@@ -128,7 +128,7 @@ export default {
           canteen_id: ['2'],
           floor: [2],
           rating: 4.0,
-          available_flag: '10' // 只在第一天供应
+          available: '10' // 只在第一天供应
         },
         {
           dish_id: 3,
@@ -138,7 +138,7 @@ export default {
           canteen_id: ['1'],
           floor: [2],
           rating: 4.5,
-          available_flag: '01' // 只在第二天供应
+          available: '01' // 只在第二天供应
         },
         {
           dish_id: 4,
@@ -148,7 +148,7 @@ export default {
           canteen_id: ['3'],
           floor: [1],
           rating: 4.3,
-          available_flag: '11'
+          available: '11'
         },
         {
           dish_id: 5,
@@ -158,7 +158,7 @@ export default {
           canteen_id: ['2'],
           floor: [3],
           rating: 4.7,
-          available_flag: '10'
+          available: '10'
         },
         {
           dish_id: 6,
@@ -168,7 +168,7 @@ export default {
           canteen_id: ['1'],
           floor: [3],
           rating: 4.4,
-          available_flag: '01'
+          available: '01'
         },
         {
           dish_id: 7,
@@ -178,7 +178,7 @@ export default {
           canteen_id: ['3'],
           floor: [2],
           rating: 4.1,
-          available_flag: '11'
+          available: '11'
         },
         {
           dish_id: 8,
@@ -188,7 +188,7 @@ export default {
           canteen_id: ['2'],
           floor: [1],
           rating: 4.0,
-          available_flag: '00' // 两天都不供应
+          available: '00' // 两天都不供应
         }
       ],
       addDishForm: {
@@ -248,8 +248,8 @@ export default {
       this.menuItems = (this.dishes || []).filter(item =>
           item.canteen_id.includes(this.selectedCanteen) &&
           item.floor.includes(this.selectedFloor) &&
-          item.available_flag &&
-          item.available_flag[flagIndex] === '1'
+          item.available &&
+          item.available[flagIndex] === '1'
       )
 
       this.menuItems.forEach(item => {
