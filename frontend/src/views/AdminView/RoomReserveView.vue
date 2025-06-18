@@ -62,7 +62,7 @@ export default {
       ],
     };
   },
-  mounted() {
+  created() {
     axios.get("http://localhost:8080/private-room/getAll")
         .then((res) => {
           if (res.data.code === 200) {

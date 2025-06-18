@@ -73,7 +73,7 @@ export default {
       return `/images/${this.dish.image}.jpg`;
     }
   },
-  mounted() {
+  created() {
     if (this.dishID !== '0') {
       axios.get(`http://localhost:8080/dish/getById?dish_id=${this.dishID}`)
           .then((res) => {

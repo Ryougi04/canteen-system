@@ -86,7 +86,7 @@ export default {
       ],
     };
   },
-  mounted() {
+  created() {
     axios.get("http://localhost:8080/dish/getAll")
         .then((res) => {
           if(res.data.code === 200) {

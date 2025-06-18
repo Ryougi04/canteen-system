@@ -56,7 +56,7 @@ export default {
       newComment: ''
     };
   },
-  mounted() {
+  created() {
     axios.get(`http://localhost:8080/dish/getById?dish_id=${this.dishID}`)
         .then((res) => {
           if(res.data.code === 200) {

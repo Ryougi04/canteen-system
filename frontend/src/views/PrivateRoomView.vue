@@ -62,7 +62,7 @@ export default {
       successMessage: ''
     };
   },
-  mounted() {
+  created() {
     axios.get(`http://localhost:8080/user/get?username=${this.form.username}`)
         .then((res) => {
           if(res.data.code === 200) {

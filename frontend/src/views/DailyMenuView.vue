@@ -183,7 +183,7 @@ export default {
       menuCategories: ['早餐', '午餐', '晚餐', '夜宵']
     }
   },
-  mounted() {
+  created() {
     axios.get("http://localhost:8080/dish/getAll")
         .then((res) => {
           if(res.data.code === 200) {
@@ -199,9 +199,6 @@ export default {
       const canteen = this.canteens.find(c => c.id === this.selectedCanteen)
       return canteen ? canteen.name : ''
     }
-  },
-  created() {
-    this.fetchMenu()
   },
   methods: {
     goToHome() {
