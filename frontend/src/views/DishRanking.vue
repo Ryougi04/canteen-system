@@ -31,41 +31,34 @@ export default {
   data() {
     return {
       dishes: [
-        // {
-        //   dish_id: 1,
-        //   dish_name: '红烧肉',
-        //   image: 'hongshaorou',
-        //   rating: 4.8,
-        //   rating_num: 120,
-        // },
-        // {
-        //   dish_id: 2,
-        //   dish_name: '宫保鸡丁',
-        //   image: 'yuxiangrousi',
-        //   rating: 4.7,
-        //   rating_num: 110,
-        // },
-        // {
-        //   dish_id: 3,
-        //   dish_name: '鱼香肉丝',
-        //   image: 'yuxiangrousi',
-        //   rating: 4.6,
-        //   rating_num: 98,
-        // },
-        // {
-        //   dish_id: 4,
-        //   dish_name: '酸菜鱼',
-        //   image: 'suancaiyu',
-        //   rating: 4.3,
-        //   rating_num: 93,
-        // },
-        // {
-        //   dish_id: 5,
-        //   dish_name: '油炸梅朗潇',
-        //   image: 'suancaiyu',
-        //   rating: 4.9,
-        //   rating_num: 100,
-        // },
+        {
+          dish_id: 1,
+          dish_name: '红烧肉',
+          image: 'hongshaorou',
+          rating: 4.8,
+          rating_num: 120,
+        },
+        {
+          dish_id: 2,
+          dish_name: '宫保鸡丁',
+          image: 'yuxiangrousi',
+          rating: 4.7,
+          rating_num: 110,
+        },
+        {
+          dish_id: 3,
+          dish_name: '鱼香肉丝',
+          image: 'yuxiangrousi',
+          rating: 4.6,
+          rating_num: 98,
+        },
+        {
+          dish_id: 4,
+          dish_name: '酸菜鱼',
+          image: 'suancaiyu',
+          rating: 4.3,
+          rating_num: 93,
+        },
       ],
     };
   },

@@ -47,18 +47,18 @@ export default {
     return {
       dishID: this.$route.params.id,
       dish: {
-        // dish_id: 1,
-        // dish_name: '红烧肉',
-        // image: 'hongshaorou',
-        // description: '红烧肉是一道传统名菜，色泽红亮，入口即化，肥而不腻，深受食客喜爱。'
+        dish_id: 1,
+        dish_name: '红烧肉',
+        image: 'hongshaorou',
+        description: '红烧肉是一道传统名菜，色泽红亮，入口即化，肥而不腻，深受食客喜爱。'
       },
       selectedImageFile: null,
       username: sessionStorage.getItem('username') || '小王',
       comments: [
-        // { username: '小张', content: '味道太赞了，肉入口即化，五星推荐！' },
-        // { username: '小李', content: '有点油，但总体还不错，搭配米饭正合适。' },
-        // { username: '小王', content: '喜欢这种甜咸口味，就是分量再多点就好了~' },
-        // { username: '张三', content: '我觉得偏甜，不太适合我口味。' }
+        { username: '小张', content: '味道太赞了，肉入口即化，五星推荐！' },
+        { username: '小李', content: '有点油，但总体还不错，搭配米饭正合适。' },
+        { username: '小王', content: '喜欢这种甜咸口味，就是分量再多点就好了~' },
+        { username: '张三', content: '我觉得偏甜，不太适合我口味。' }
       ],
       deletedComments: [],
       newComment: ''
