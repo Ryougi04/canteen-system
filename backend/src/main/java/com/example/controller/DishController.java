@@ -90,14 +90,19 @@ public class DishController {
         json.put("msg", "success");
         return json;
     }
-    @PutMapping("/updatePrice")
+    @PutMapping("/updateMenu")
     @ResponseBody
-    public Map<String,Object> updatePrice(@RequestBody List<Map<String,Object>> updatedPrice){
+    @SuppressWarnings("unchecked")
+    public Map<String,Object> updatePrice(@RequestBody List<Map<String,Object>> updateMenu){
         Map<String,Object> json = new HashMap<>();
-        updatedPrice.forEach(map -> {
+        updateMenu.forEach(map -> {
             Dish dish = dishMapper.selectById((Serializable) map.get("dish_id"));
             Number price = (Number) map.get("price");
             dish.setPrice(price.floatValue());
+            dish.setCategory((List<String>) map.get("category"));
+            dish.setFloor((List<Integer>) map.get("floor"));
+            dish.setCanteen_id((List<String>) map.get("canteen_id"));
+            dish.setAvailable(map.get("available").toString());
             dishMapper.updateById(dish);
         });
         json.put("code", 200);

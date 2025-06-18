@@ -42,7 +42,7 @@
     <div class="menu-content" v-if="menuItems.length > 0">
       <div class="menu-header">
         <h2 class="menu-title">{{ selectedCanteenName }} {{ selectedFloor }}层 菜单</h2>
-        <button class="save-button" @click="savePriceChanges">保存修改</button>
+        <button class="save-button" @click="saveMenuChanges">保存修改</button>
       </div>
       <p class="menu-date">{{ formatDate(selectedDate) }}</p>
 
@@ -58,7 +58,7 @@
                   v-model.number="item.price"
                   class="price-input"
               /><span>元</span>
-              <button class="delete-button" @click="deleteDish(item.dish_id)">删除</button>
+              <button class="delete-button" @click="deleteDishFromMenu(item.dish_id, category)">删除</button>
             </li>
             <li class="dish-item">
               <select class="narrow-rounded-select" v-model="addDishForm[category].dish_id" @change="handleDishSelect(category, addDishForm[category].dish_id)">
@@ -201,7 +201,7 @@ export default {
       menuCategories: ['早餐', '午餐', '晚餐', '夜宵']
     }
   },
-  mounted() {
+  created() {
     axios.get("http://localhost:8080/dish/getAll")
         .then((res) => {
           if(res.data.code === 200) {
@@ -217,9 +217,6 @@ export default {
       const canteen = this.canteens.find(c => c.id === this.selectedCanteen)
       return canteen ? canteen.name : ''
     }
-  },
-  created() {
-    this.fetchMenu()
   },
   methods: {
     goToHome() {
@@ -240,69 +237,81 @@ export default {
       return dates
     },
     fetchMenu() {
-      const dateIndex = this.availableDates.findIndex(date => date === this.selectedDate)
-      if (dateIndex === -1) return
+      const dateIndex = this.availableDates.findIndex(date => date === this.selectedDate);
+      if (dateIndex === -1) return;
 
-      const flagIndex = dateIndex  // 0 or 1
-
+      const flagIndex = dateIndex;  // 0 or 1
       this.menuItems = (this.dishes || []).filter(item =>
           item.canteen_id.includes(this.selectedCanteen) &&
           item.floor.includes(this.selectedFloor) &&
           item.available &&
           item.available[flagIndex] === '1'
-      )
+      );
 
       this.menuItems.forEach(item => {
         item.rating = this.dishRatings[item.dish_id] || 0
       })
     },
-    deleteDish(dishId) {
-      // 可选确认框
+    deleteDishFromMenu(dishId, category) {
+      // 删除确认框
       if (!confirm('确定要删除该菜品吗？')) return;
 
-      // 删除接口调用
-      axios.delete(`http://localhost:8080/dish/delete?dish_id=${dishId}`)
-          .then(res => {
-            if (res.data.code === 200) {
-              this.dishes = this.dishes.filter(item => item.dish_id !== dishId);
-              this.fetchMenu(); // 重新筛选当前菜单
-              alert('删除成功');
-            }
-          })
-          .catch(console.error);
+      const deleted = this.menuItems.find(item => item.dish_id === dishId);
+      deleted.category.splice(deleted.category.indexOf(category), 1);
+      if (deleted.category.length === 0) {
+        deleted.floor.splice(deleted.floor.indexOf(this.selectedFloor), 1);
+        if (deleted.floor.length === 0) {
+          deleted.canteen_id.splice(deleted.canteen_id.indexOf(this.selectedCanteen), 1);
+          if (deleted.canteen_id.length === 0) {
+            const dateIndex = this.availableDates.findIndex(date => date === this.selectedDate);
+            this.menuItems.available[dateIndex] = '0';
+          }
+        }
+      }
     },
-    savePriceChanges() {
-      const updatedPrice = this.menuItems.map(item => ({
+    addDishToMenu(category) {
+      const form = this.addDishForm[category];
+      const dish = this.dishes.find(d => d.dish_id === form.dish_id);
+      if (!dish) return alert("请选择菜品！");
+
+      // 检查菜品是否已存在于菜单中
+      const existingItem = this.menuItems.find(item => item.dish_id === dish.dish_id);
+      if (existingItem) {
+        if (existingItem.category.includes(category)) {
+          // 如果已存在于当前餐段的菜单中
+          return alert("该菜品已存在于当前餐段的菜单中！");
+        } else {
+          existingItem.category.push(category);
+        }
+      } else {
+        // 添加新条目
+        this.menuItems.push({
+          ...dish,
+          category: [category]
+        });
+      }
+
+      // 重置表单
+      form.dish_id = '';
+      form.price = 0.0;
+    },
+    saveMenuChanges() {
+      const updateMenu = this.menuItems.map(item => ({
         dish_id: item.dish_id,
-        price: parseFloat(item.price)
+        price: parseFloat(item.price),
+        category: item.category,
+        floor: item.floor,
+        canteen_id: item.canteen_id,
+        available: item.available
       }));
-      axios.put("http://localhost:8080/dish/updatePrice", updatedPrice)
+      axios.put("http://localhost:8080/dish/updateMenu", updateMenu)
           .then(res => {
-            if (res.data.code === 200) {
-              alert("保存成功！");
-            } else {
-              alert("保存失败，请稍后重试。");
-            }
+            res.data.code === 200 ? alert("保存成功！") : alert("保存失败，请稍后重试。");
           })
           .catch(err => {
             console.error(err);
           });
     },
-    addDishToMenu(category) {
-      const form = this.addDishForm[category];
-      const dish = this.dishes.find(d => d.dish_id === form.dish_id);
-      if (!dish) return alert("请选择菜品");
-
-      const alreadyExists = this.menuItems.some(
-          item => item.dish_id === dish.dish_id && (item.category && item.category.includes(category))
-      );
-      if (alreadyExists) return alert("该菜品已存在于菜单中");
-
-      this.menuItems.push({ ...dish, category });
-      form.dish_id = '';
-      form.price = 0.0;
-    },
-
     handleDishSelect(category, dishId) {
       const dish = this.dishes.find(d => d.dish_id === dishId);
       if (dish) {
