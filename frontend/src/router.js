@@ -2,14 +2,14 @@ import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from './views/HomeView.vue'
 import CanteenListView from './views/CanteenListView.vue'
 import CanteenDetailView from './views/CanteenDetailView.vue'
-import PrivateRoomView from './views/PrivateRoomView.vue'
+import PrivateRoomView from './views/RoomReserveView.vue'
 import NutritionAdviceView from './views/NutritionAdviceView.vue'
-import DishRanking from "./views/DishRanking.vue";
-import DishComment from "./views/DishComment.vue";
+import DishRanking from "./views/DishRankingView.vue";
+import DishComment from "./views/DishCommentView.vue";
 import AdminView from './views/AdminView/AdminView.vue'
 import DishOverview from "@/views/AdminView/DishOverview.vue";
 import DishManageView from "@/views/AdminView/DishManageView.vue";
-import RoomReserveView from "@/views/AdminView/RoomReserveView.vue";
+import RoomReserveView from "@/views/AdminView/PrivateRoomView.vue";
 import MenuManageView from "@/views/AdminView/MenuManageView.vue";
 
 const routes = [
