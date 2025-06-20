@@ -242,8 +242,8 @@ export default {
 
       const flagIndex = dateIndex;  // 0 or 1
       this.menuItems = (this.dishes || []).filter(item =>
-          item.canteen_id.includes(this.selectedCanteen) &&
-          item.floor.includes(this.selectedFloor) &&
+          item.canteen_id && item.canteen_id.includes(this.selectedCanteen) &&
+          item.floor && item.floor.includes(this.selectedFloor) &&
           item.available &&
           item.available[flagIndex] === '1'
       );
